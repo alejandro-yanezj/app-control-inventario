@@ -11,7 +11,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route index element={<DetalleProducto />} />
+          <Route index element={<Productos />} />
       </Routes>
     </BrowserRouter>
   );
