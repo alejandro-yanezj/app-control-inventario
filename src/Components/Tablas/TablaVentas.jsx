@@ -1,31 +1,40 @@
-import { TableBody, TableHead, TableRow, TableCell, Container, TablePagination, Table } from "@mui/material"
+import { TableBody, TableHead, TableRow, TableCell, Table, Box} from "@mui/material"
+import  { CabeceraTablaStyle } from '../../Utils/Temas'
 
+export const TablaVentas= ({data = [], nombre=""}) =>{
 
-export const TablaVentas= ({data = []}) =>{
+    const encabezados = ["Codigo", "Fecha"]
 
-    const encabezado = ["Codigo", "Fecha"]
-
-    return (
-        <Container>
-            <Table>
-                <TableHead style={{background:"#000000"}}>
-                <TableRow >
-                    {encabezado.map(e =>{
-                        return (<TableCell key={e} style={{color:"#FFFFFF"}} > {e} </TableCell>)
-                    })}
-                </TableRow>
-                </TableHead>
-                <TableBody>
+    {if(data!=null && data.length>0){
+        return(
+            <>
+                <Box sx={{textAlign:"center",fontSize:30, margin:5}}> Ventas {nombre}</Box>
+                <Table >
+                    <TableHead style={{background:"#e9791a"}}>
+                        <TableRow>
+                            {encabezados.map(e =>{
+                                return (<TableCell key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
+                            })}
+                        </TableRow>
+                    </TableHead>
+                    
+                    <TableBody>
                     {data.map(d => {
                         return(
-                            <TableRow key = {d.codigo}>
-                            <TableCell> {d.codigo} </TableCell>
-                            <TableCell> {d.fecha} </TableCell>
+                            <TableRow key = {d.idVenta}>
+                                <TableCell> {d.numero} </TableCell>
+                                <TableCell> {d.fecha} </TableCell>
                             </TableRow>
-                        )
-                    })}
-                </TableBody>
-            </Table>
-        </Container>
-    )
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+            </>
+            )
+    }else if((data==null || data.length==0) && nombre!=null){
+        return(
+        <Box sx={{textAlign:"center",fontSize:30, margin:5}}> No existen ventas para el cliente {nombre}</Box>
+        )
+    }
+}
 }

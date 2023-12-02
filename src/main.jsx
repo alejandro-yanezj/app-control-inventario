@@ -1,17 +1,29 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {Home} from './Components/Home'
+import { Home } from './Components/Home'
 import { AgregarProducto } from "./Components/agregar/AgregarProducto";
 import { AgregarCliente } from "./Components/agregar/AgregarCliente";
 import { Productos } from "./Components/vistaGeneral/Productos";
-import { Detallecliente } from "./Components/vistaDetalle/DetalleCliente";
-import { DetalleProducto } from "./Components/vistaDetalle/DetalleProducto";
+import { Clientes } from "./Components/vistaGeneral/Clientes";
+import { AgregarStock } from "./Components/agregar/AgregarStockProducto"
+import { Ventas } from "./Components/vistaGeneral/Ventas";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route index element={<Productos />} />
+
+        <Route path="/app-inventario/" element={<Home />}>
+          <Route path="productos" element={<Productos />} />
+
+          <Route path="clientes" element={<Clientes />}>
+            <Route path="agregar-cliente"  element={<AgregarCliente />} />
+          </Route>
+
+          <Route path="ventas" element={<Ventas />} />
+          <Route path="agregar-stock/:idProducto" element={<AgregarStock />} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   );

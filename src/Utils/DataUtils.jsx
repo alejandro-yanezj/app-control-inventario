@@ -1,3 +1,71 @@
+export const getVentas = () =>{
+    return[
+        {
+            "idVenta":1,
+            "idCliente":1,
+            "numero":10001,
+            "fecha":"20-11-2023"
+        },
+        {
+            "idVenta":2,
+            "idCliente":1,
+            "numero":10002,
+            "fecha":"20-11-2023"
+        },
+        {
+            "idVenta":3,
+            "idCliente":2,
+            "numero":10003,
+            "fecha":"20-11-2023"
+        },
+        {
+            "idVenta":4,
+            "idCliente":2,
+            "numero":10004,
+            "fecha":"20-11-2023"
+        },
+        {
+            "idVenta":5,
+            "idCliente":2,
+            "numero":10005,
+            "fecha":"20-11-2023"
+        }
+    ]
+
+}
+
+export const getClientes = () =>{
+    return [
+        {
+            "idCliente":1,
+            "nombre":"Alejandro Yañez",
+            "rut": "18610378",
+            "dv":"5",
+            "direccion":"Lago pirihueico 6502, La Florida",
+            "email":"alejandro.yanezj@gmail.com",
+            "telefono": "+56954360080"
+        },
+        {
+            "idCliente":2,
+            "nombre":"Victor Yañez",
+            "rut": "11111111",
+            "dv":"1",
+            "direccion":"Algun lugar de Aysen",
+            "email":"alejandro.yanezj@gmail.com",
+            "telefono": "+56954360080"
+        },
+        {
+            "idCliente":3,
+            "nombre":"Thomas Ahumada",
+            "rut": "12345678",
+            "dv":"9",
+            "direccion":"Walker Martinez",
+            "email":"alejandro.yanezj@gmail.com",
+            "telefono": "+56954360080"
+        }
+    ]
+}
+
 export const getProductos = () =>{
         return [
             {

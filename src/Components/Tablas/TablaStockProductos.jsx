@@ -1,4 +1,5 @@
-import  { Box, Container, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import  { Box, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import  { CabeceraTablaStyle } from '../../Utils/Temas'
 
 export const TablaStockProductos = ({data=[], nombre}) =>{
     
@@ -7,12 +8,12 @@ export const TablaStockProductos = ({data=[], nombre}) =>{
     {if(data!=null && data.length>0){
         return(
             <>
-                <Box sx={{textAlign:"center",fontSize:30}}> Stock de producto {nombre}</Box>
-                <Table>
-                    <TableHead style={{background:"#000000"}}>
+                <Box sx={{textAlign:"center",fontSize:30, paddingBottom:3}}> Stock {nombre}</Box>
+                <Table >
+                    <TableHead>
                         <TableRow>
                             {encabezados.map(e =>{
-                                return (<TableCell key={e} style={{color:"#FFFFFF"}} > {e} </TableCell>)
+                                return (<TableCell key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
                             })}
                         </TableRow>
                     </TableHead>
@@ -33,7 +34,7 @@ export const TablaStockProductos = ({data=[], nombre}) =>{
             )
     }else if((data==null || data.length==0) && nombre!=null){
         return(
-        <Box sx={{textAlign:"center",fontSize:30}}> No existe stock para el producto {nombre}</Box>
+        <Box sx={{textAlign:"center",fontSize:30,margin:5}}> No existe stock para el producto {nombre}</Box>
         )
     }
 }
