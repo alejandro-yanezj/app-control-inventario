@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { ListaVariable } from "../Listas/ListaVariable";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { AgregarCliente } from "../agregar/AgregarCliente";
 import { useNavigate,Outlet } from 'react-router-dom';
 
 
@@ -66,14 +65,14 @@ export const Clientes = () => {
 
     return (
         <Container>
-            <Table>
-                <TableCell>
-                    <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<PersonAddIcon />} onClick={handleClickAgregarCliente} >Agregar Cliente</Button>
+            <Table sx={{marginTop:'2%'}}>
+                <TableCell sx={{width:'30%'}}>
+                    <Button variant="contained" color="success" endIcon={<PersonAddIcon />} onClick={handleClickAgregarCliente} >Agregar Cliente</Button>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{width:'80%'}}>
                     <Autocomplete
                         id="cliente-seleccionado"
-                        sx={{ width: 320, margin: 5 }}
+                        sx={{marginBottom:'2%'}}
                         options={clientes}
                         autoHighlight
                         getOptionLabel={(option) => option.nombre + "  " + option.rut + "-" + option.dv}
@@ -103,5 +102,4 @@ export const Clientes = () => {
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
             <Outlet></Outlet>
         </Container>)
-
 }

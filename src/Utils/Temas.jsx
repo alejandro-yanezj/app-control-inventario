@@ -10,21 +10,20 @@ export const CabeceraTablaStyle = {
 }
 
 export const NavBarStyle = { 
-    bgcolor: 'grey',
-     height: 150 
+    bgcolor: 'grey'
 }
 
 export const IconoNavBarSize = {
-    fontSize: 60 
+    fontSize:'200%'
 }
 
 export const ContainerModalAgregarStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -40%)',
-    width: '70%',
-    height: '70%',
+    transform: 'translate(-50%, -50%)',
+    width: '50%',
+    height: '85%',
     bgcolor: 'white',
     boxShadow: 10,
     borderRadius:'2%',
@@ -35,14 +34,11 @@ export const ContainerModalAgregarStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -30%)',
-    width: '30%',
+    width: '40%',
     height: '30%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     borderColor:'blue',
-    borderRadius:'2%',
-    display:'flex',
-    justifyContent: 'center'
+    borderRadius:'5%'
   };
-

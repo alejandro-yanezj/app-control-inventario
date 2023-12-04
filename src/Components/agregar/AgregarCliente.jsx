@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Container, List, ListItem, TextField, Modal, Box, Table, TableCell, TableHead, Typography, Alert, TableBody, TableRow } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ContainerModalAgregarStyle, ContainerModalConfirmacionStyle } from '../../Utils/Temas'
+import { ModalConfirmacion } from "../Modals/ModalConfirmacion";
 
 export const AgregarCliente = () => {
 
@@ -27,17 +28,61 @@ export const AgregarCliente = () => {
     }
 
     const validarCliente = () => {
-        console.log("datos del cliente antes de validar", nombreCliente, rut, telefono, email);
-        if (nombreCliente != null &&
-            rut != null &&
-            telefono != null &&
-            email != null) {
+        if (validarNombre()
+            && validarRut()
+            && validarTelefono()
+            && validarEmail()) {
             return true;
         }
         return false;
     }
 
+    const validarNombre = () => {
+        console.log("validando nombre -->", nombreCliente);
+        if (nombreCliente === null || nombreCliente.length < 1) {
+            mostrarAlerta("error", "Debe ingresar nombre cliente");
+            return false;
+            //ingresar rut;
+        }
+        return true;
+        //agregar mas validaciones
+    }
+
+    const validarRut = () => {
+        console.log("validando rut")
+        if (rut === null || rut.length < 1) {
+            mostrarAlerta("error", "Debe ingresar rut cliente");
+            return false;
+            //ingresar rut;
+        }
+        return true;
+        //validar modulo 11
+    }
+
+    const validarTelefono = () => {
+        console.log("validando telefono")
+        if (telefono === null || telefono.length < 1) {
+            mostrarAlerta("error", "Debe ingresar telefono cliente");
+            return false;
+            //ingresar rut;
+        }
+        return true;
+        //validar modulo 11
+    }
+
+    const validarEmail = () => {
+        console.log("validando email")
+        if (email === null || email.length < 1) {
+            mostrarAlerta("error", "Debe ingresar email cliente");
+            return false;
+            //ingresar rut;
+        }
+        return true;
+        //validar modulo 11
+    }
+
     const mostrarAlerta = (tipoAlerta, mensaje) => {
+        if(showAlert) return
         setAlertSeverity(tipoAlerta);
         setAlertContent(mensaje);
         setTimeout(() => {
@@ -47,117 +92,77 @@ export const AgregarCliente = () => {
     }
 
     const handleClickCancelarInfo = () => {
-        console.log("cancelando confirmacion agregar cliente");
         setOpenModalConfirmacion(false);
-
     }
 
     const handleClickConfirmarInfo = () => {
-
+        return true;
     }
 
     const handleClickButtonGuardar = () => {
         if (validarCliente() == true) {
-            console.log("cliente valido")
             setOpenModalConfirmacion(true);
-        }
-        else {
-            console.log("cliente no valido")
-            mostrarAlerta("error", "debe ingresar la informacion completa del cliente")
         }
     }
 
     const handleOnChangeNombre = (e) => {
-        //validar (?)
-        if (e.target.value != null || e.target.value.lengh() > 0) {
-            setNombreCliente(e.target.value)
-        }
+        setNombreCliente(e.target.value)
     }
 
     const handleOnChangeRut = (e) => {
         //validar (?)
-        if (e.target.value != null || e.target.value.lengh() > 0) {
-            setRut(e.target.value)
-        }
+        setRut(e.target.value)
+
 
     }
     const handleOnChangeTelefono = (e) => {
         //validar (?)
-        console.log("info telefono -->", e.target.value)
-        if (e.target.value != null || e.target.value.lengh() > 0) {
-            setTelefono(e.target.value)
-        }
+        setTelefono(e.target.value)
+
     }
 
     const handleOnChangeEmail = (e) => {
         //validar (?)
-        if (e.target.value != null || e.target.value.lengh() > 0) {
-            setEmail(e.target.value)
-        }
+        setEmail(e.target.value)
+
     }
 
     return (
         <>
-
             <Modal
                 open={openModal}
-                onClose={console.log("cerrando modal")}
-            >
+                onClose={console.log("cerrando modal")}>
                 <Container sx={ContainerModalAgregarStyle} >
-                    <Box sx={{ textAlign: 'center', fontSize: '250%', marginTop: '5%' }}>Agregar Cliente</Box>
+                    <Box sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}>Agregar Cliente</Box>
                     <List>
                         <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField id="nombreCliente" label="Nombre Cliente" variant="outlined" onChange={handleOnChangeNombre} />
+                            <TextField sx={{ width: '80%' }} label="Nombre Cliente" onChange={handleOnChangeNombre} />
                         </ListItem>
                         <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField id="rut" label="rut" variant="outlined" onChange={handleOnChangeRut} />
+                            <TextField sx={{ width: '80%' }} label="Rut" variant="outlined" onChange={handleOnChangeRut} />
                         </ListItem>
                         <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField id="telefono" label="telefono" variant="outlined" onChange={handleOnChangeTelefono} />
+                            <TextField sx={{ width: '80%' }} label="Telefono" variant="outlined" onChange={handleOnChangeTelefono} />
                         </ListItem>
                         <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField id="email" label="email" variant="outlined" onChange={handleOnChangeEmail} />
+                            <TextField sx={{ width: '80%' }} label="Email" variant="outlined" onChange={handleOnChangeEmail} />
                         </ListItem>
                     </List>
                     <Typography align="center">
                         <Button sx={{ margin: 2 }}
                             variant="contained" color="error" onClick={handleClickCancelar}> Cancelar</Button>
                         <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}> Guardar</Button>
+                        {showAlert && <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>{alertContent}</Alert>}
                     </Typography >
-                    {showAlert && <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>{alertContent}</Alert>}
-
-                    <Modal
-                        open={openModalConfirmacion}
-                        onClose={console.log("cerrando modal")}
-                    >
-                        <Container sx={ContainerModalConfirmacionStyle}>
-
-                            <Table sx={{ margin: '5%' }}>
-                                <TableHead>
-                                    <TableCell>
-                                        <Typography >Confirma los datos ingresados?</Typography>
-
-                                    </TableCell>
-
-                                   
-                                </TableHead>
-                                <TableBody>
-                                    <TableCell>
-                                        <Button sx={{ margin: 2 }} variant="contained" color="error" onClick={handleClickCancelarInfo}> Cancelar</Button>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickConfirmarInfo}> Confirmar</Button>
-                                    </TableCell>
-                                </TableBody>
-                            </Table>
-
-
-
-                        </Container>
-
-                    </Modal>
+                    <ModalConfirmacion
+                     openModalConfirmacion={openModalConfirmacion}
+                     mensaje={"¿Confirma que desea agregar cliente?"}
+                     handleClickCancelarInfo={handleClickCancelarInfo}
+                     handleClickConfirmarInfo={handleClickConfirmarInfo}
+                     />
                 </Container >
             </Modal >
         </>
     )
+
 }

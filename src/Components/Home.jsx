@@ -34,9 +34,9 @@ export const Home = () => {
                     setSeleccionado(value);
                 }}
             >
-                <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography sx={{ fontSize: 30 }}>Clientes</Typography>} icon={<PersonOutlineTwoToneIcon sx={IconoNavBarSize} />} />
-                <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography sx={{ fontSize: 30 }}>Productos</Typography>} icon={<Inventory2TwoToneIcon sx={IconoNavBarSize} />} />
-                <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography sx={{ fontSize: 30 }}>Ventas</Typography>} icon={<ShoppingCartTwoToneIcon sx={IconoNavBarSize} />} />
+                <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography>Clientes</Typography>} icon={<PersonOutlineTwoToneIcon sx={IconoNavBarSize} />} />
+                <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography>Productos</Typography>} icon={<Inventory2TwoToneIcon sx={IconoNavBarSize} />} />
+                <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography>Ventas</Typography>} icon={<ShoppingCartTwoToneIcon sx={IconoNavBarSize} />} />
             </BottomNavigation>
             <Outlet></Outlet>
 

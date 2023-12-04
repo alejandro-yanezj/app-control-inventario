@@ -6,6 +6,8 @@ import { ListaVariable } from "../Listas/ListaVariable"
 import { CabeceraTablaStyle } from "../../Utils/Temas"
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import PlaylistAddTwoToneIcon from '@mui/icons-material/PlaylistAddTwoTone';
+import { useNavigate,Outlet } from 'react-router-dom';
+
 
 export const Productos = () => {
 
@@ -14,10 +16,21 @@ export const Productos = () => {
     const [nombreProductoSeleccionado, setNombreProductoSeleccionado] = useState(null);
     const [agregarStockDisabled, setAgregarStockDisabled] = useState(true);
     const [datosProductoSeleccionado, setDatosProductoSeleccionado] = useState(null);
+    const navigate = useNavigate();
 
     //traer info desde el servicio backend
     const productos = getProductos();
     const stockProductos = getStockProductos();
+
+    useEffect(() => {
+        filtarStockProducto(stockProductos)
+        if (productoSeleccionado == 0) {
+            setAgregarStockDisabled(true);
+        }
+        else {
+            setAgregarStockDisabled(false);
+        }
+    }, [productoSeleccionado]);
 
     const handleOnChange = (value) => {
         if (value != null) {
@@ -45,28 +58,21 @@ export const Productos = () => {
         setStockFiltrado(productosFiltrados);
     }
 
-    useEffect(() => {
-        filtarStockProducto(stockProductos)
-        if (productoSeleccionado == 0) {
-            setAgregarStockDisabled(true);
-        }
-        else {
-            setAgregarStockDisabled(false);
-        }
-    }, [productoSeleccionado]);
-
-
+    const handleClickAgregarProducto =()=>{
+        navigate("/app-inventario/productos/agregar-producto")
+    }
+   
     return (
         <Container>
-            <Table>
-                <TableCell>
-                <Button variant="contained" color="success" sx={{ align: "center"}} endIcon={<AddBusinessIcon/>} >Agregar Producto</Button>
+            <Table  sx={{marginTop:'2%'}}>
+                <TableCell sx={{width:'30%'}}>
+                <Button variant="contained" color="success" sx={{ align: "center"}} endIcon={<AddBusinessIcon/>} onClick={handleClickAgregarProducto} >Agregar Producto</Button>
 
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{width:'70%'}}>
                 <Autocomplete
                 id="producto-seleccionado"
-                sx={{ width: 300, marginTop: 5 }}
+                sx={{marginBottom:'2%', textAlign:'center'}}
                 options={productos}
                 autoHighlight
                 getOptionLabel={(option) => option.sku + "  " + option.nombre + "  " + option.unidad}
@@ -86,7 +92,7 @@ export const Productos = () => {
                     />
                 )}
                 onChange={(event, newValue) => { handleOnChange(newValue) }}
-                isOptionEqualToValue={(option, value) => { return value.sku }}
+                isOptionEqualToValue={(option, value) => { return value.idProducto }}
             />
                 </TableCell>
 
@@ -95,6 +101,8 @@ export const Productos = () => {
             <ListaVariable data={datosProductoSeleccionado}></ListaVariable>
             <TablaStockProductos data={stockFiltrado} nombre={nombreProductoSeleccionado} estilo={CabeceraTablaStyle}></TablaStockProductos>
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon />} > Agregar Stock</Button>
+            <Outlet></Outlet>
+
         </Container>)
 
 }

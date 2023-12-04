@@ -14,16 +14,15 @@ export default function App() {
       <Routes>
 
         <Route path="/app-inventario/" element={<Home />}>
-          <Route path="productos" element={<Productos />} />
-
+          <Route path="productos" element={<Productos />}>
+            <Route path="agregar-producto" element={<AgregarProducto/>} />
+          </Route>
           <Route path="clientes" element={<Clientes />}>
             <Route path="agregar-cliente"  element={<AgregarCliente />} />
           </Route>
-
           <Route path="ventas" element={<Ventas />} />
           <Route path="agregar-stock/:idProducto" element={<AgregarStock />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );
