@@ -1,7 +1,11 @@
 export const BotonesNavBarStyle = {
     color:'black',
     '&.Mui-selected':{color:'white'},
-    };
+};
+
+export const ContainerRootStyle = {
+    '&.MuiContainer-root':{padding:0, margin:0, maxWidth:'100%'}
+}
 
 export const CabeceraTablaStyle = {
     color:"white", 
@@ -10,7 +14,9 @@ export const CabeceraTablaStyle = {
 }
 
 export const NavBarStyle = { 
-    bgcolor: 'grey'
+    bgcolor: 'grey',
+    width:'100%',
+    '&.MuiBottomNavigation-root':{width:'100%'}
 }
 
 export const IconoNavBarSize = {

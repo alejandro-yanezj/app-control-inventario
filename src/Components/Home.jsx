@@ -3,7 +3,7 @@ import { Container, Button, Box, BottomNavigation, BottomNavigationAction, Typog
 import { Outlet, useNavigate } from 'react-router-dom';
 import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
-import { IconoNavBarSize, BotonesNavBarStyle, NavBarStyle } from '../Utils/Temas';
+import { IconoNavBarSize, BotonesNavBarStyle, NavBarStyle, ContainerRootStyle } from '../Utils/Temas';
 import PersonOutlineTwoToneIcon from '@mui/icons-material/PersonOutlineTwoTone';
 
 export const Home = () => {
@@ -25,7 +25,7 @@ export const Home = () => {
     const navigate = useNavigate();
 
     return (
-        <>
+        <Container sx={ContainerRootStyle} >
             <BottomNavigation
                 sx={NavBarStyle}
                 showLabels
@@ -39,9 +39,7 @@ export const Home = () => {
                 <BottomNavigationAction sx={BotonesNavBarStyle} label={<Typography>Ventas</Typography>} icon={<ShoppingCartTwoToneIcon sx={IconoNavBarSize} />} />
             </BottomNavigation>
             <Outlet></Outlet>
-
-
-        </>
+        </Container>
     );
 }
 
