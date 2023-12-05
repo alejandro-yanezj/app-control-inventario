@@ -12,7 +12,7 @@ export const Clientes = () => {
 
     const [clienteSeleccionado, setClienteSeleccionado] = useState(0);
     const [ventasFiltradas, setVentasFiltradas] = useState(null);
-    const [nombreClienteSeleccionado, setNombreClienteSeleccionado] = useState(null);
+    const [validarVentasTabla, setValidarVentasTabla] = useState(false);
     const [agregarVentaDisabled, setAgregarVentaDisabled] = useState(true);
     const [datosClienteSeleccionado, setDatosClienteSeleccionado] = useState(null);
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ export const Clientes = () => {
     const handleOnChange = (value) => {
         if (value != null) {
             setClienteSeleccionado(value.idCliente);
-            setNombreClienteSeleccionado(value.nombre);
+            setValidarVentasTabla(true);
             setDatosClienteSeleccionado({
                 "Nombre": value.nombre,
                 "Rut": value.rut + "-" + value.dv,
@@ -48,7 +48,7 @@ export const Clientes = () => {
 
         } else {
             setClienteSeleccionado(0);
-            setNombreClienteSeleccionado(null);
+            setValidarVentasTabla(false);
             setDatosClienteSeleccionado(null);
         }
     }
@@ -98,7 +98,7 @@ export const Clientes = () => {
             </Table>
 
             <ListaVariable data={datosClienteSeleccionado}></ListaVariable>
-            <TablaVentas data={ventasFiltradas} nombre={nombreClienteSeleccionado}></TablaVentas>
+            <TablaVentas ventas={ventasFiltradas} validar={validarVentasTabla} clientes={clientes}></TablaVentas>
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
             <Outlet></Outlet>
         </Container>)

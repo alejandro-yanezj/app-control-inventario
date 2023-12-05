@@ -1,16 +1,16 @@
 import { TableBody, TableHead, TableRow, TableCell, Table, Box} from "@mui/material"
 import  { CabeceraTablaStyle } from '../../Utils/Temas'
 
-export const TablaVentas= ({data = [], nombre=""}) =>{
+export const TablaVentas= ({ventas = [], validar=false, clientes=[]}) =>{
 
-    const encabezados = ["Codigo", "Fecha"]
+    const encabezados = ["Codigo", "Fecha", "Cliente"]
 
-    {if(data!=null && data.length>0){
+    {if(ventas!=null && ventas.length>0){
         return(
             <>
-                <Box sx={{textAlign:"center",fontSize:30, margin:5}}> Ventas {nombre}</Box>
+                <Box sx={{textAlign:"left",fontSize:30, margin:5}}> Ventas: </Box>
                 <Table >
-                    <TableHead style={{background:"#e9791a"}}>
+                    <TableHead >
                         <TableRow>
                             {encabezados.map(e =>{
                                 return (<TableCell key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
@@ -19,11 +19,16 @@ export const TablaVentas= ({data = [], nombre=""}) =>{
                     </TableHead>
                     
                     <TableBody>
-                    {data.map(d => {
+                    {ventas.map(v => {
                         return(
-                            <TableRow key = {d.idVenta}>
-                                <TableCell> {d.numero} </TableCell>
-                                <TableCell> {d.fecha} </TableCell>
+                            <TableRow key = {v.idVenta}>
+                                <TableCell> {v.numero} </TableCell>
+                                <TableCell> {v.fecha} </TableCell>
+                                <TableCell>
+                                    {clientes.map(c=>{
+                                        if(c.idCliente===v.idCliente) return c.nombre
+                                    })}
+                                </TableCell>
                             </TableRow>
                             )
                         })}
@@ -31,10 +36,8 @@ export const TablaVentas= ({data = [], nombre=""}) =>{
                 </Table>
             </>
             )
-    }else if((data==null || data.length==0) && nombre!=null){
-        return(
-        <Box sx={{textAlign:"center",fontSize:30, margin:5}}> No existen ventas para el cliente {nombre}</Box>
-        )
+    }else if(validar){
+        return(<Box sx={{textAlign:"center",fontSize:'100%', margin:'3%'}}> No existen ventas</Box>)
     }
 }
 }

@@ -6,7 +6,7 @@ import { ListaVariable } from "../Listas/ListaVariable"
 import { CabeceraTablaStyle } from "../../Utils/Temas"
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import PlaylistAddTwoToneIcon from '@mui/icons-material/PlaylistAddTwoTone';
-import { useNavigate,Outlet } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 
 
 export const Productos = () => {
@@ -58,46 +58,46 @@ export const Productos = () => {
         setStockFiltrado(productosFiltrados);
     }
 
-    const handleClickAgregarProducto =()=>{
+    const handleClickAgregarProducto = () => {
         navigate("/app-inventario/productos/agregar-producto")
     }
-   
+
     return (
         <Container>
-            <Table  sx={{marginTop:'2%'}}>
-                <TableCell sx={{width:'30%'}}>
-                <Button variant="contained" color="success" sx={{ align: "center"}} endIcon={<AddBusinessIcon/>} onClick={handleClickAgregarProducto} >Agregar Producto</Button>
+            <Table sx={{ marginTop: '2%' }}>
+                <TableCell sx={{ width: '30%' }}>
+                    <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<AddBusinessIcon />} onClick={handleClickAgregarProducto} >Agregar Producto</Button>
 
                 </TableCell>
-                <TableCell sx={{width:'70%'}}>
-                <Autocomplete
-                id="producto-seleccionado"
-                sx={{marginBottom:'2%', textAlign:'center'}}
-                options={productos}
-                autoHighlight
-                getOptionLabel={(option) => option.sku + "  " + option.nombre + "  " + option.unidad}
-                renderOption={(props, option) => (
-                    <Box component="li"{...props}>
-                        {option.sku} | {option.nombre} | {option.unidad}
-                    </Box>
-                )}
-                noOptionsText="Sin coincidencias"
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label="Seleccionar producto"
-                        inputProps={{
-                            ...params.inputProps,
-                        }}
+                <TableCell sx={{ width: '70%' }}>
+                    <Autocomplete
+                        id="producto-seleccionado"
+                        sx={{ marginBottom: '2%', textAlign: 'center' }}
+                        options={productos}
+                        autoHighlight
+                        getOptionLabel={(option) => option.sku + "  " + option.nombre + "  " + option.unidad}
+                        renderOption={(props, option) => (
+                            <Box component="li"{...props}>
+                                {option.sku} | {option.nombre} | {option.unidad}
+                            </Box>
+                        )}
+                        noOptionsText="Sin coincidencias"
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Seleccionar producto"
+                                inputProps={{
+                                    ...params.inputProps,
+                                }}
+                            />
+                        )}
+                        onChange={(event, newValue) => { handleOnChange(newValue) }}
+                        isOptionEqualToValue={(option, value) => { return value.idProducto }}
                     />
-                )}
-                onChange={(event, newValue) => { handleOnChange(newValue) }}
-                isOptionEqualToValue={(option, value) => { return value.idProducto }}
-            />
                 </TableCell>
 
             </Table>
-            
+
             <ListaVariable data={datosProductoSeleccionado}></ListaVariable>
             <TablaStockProductos data={stockFiltrado} nombre={nombreProductoSeleccionado} estilo={CabeceraTablaStyle}></TablaStockProductos>
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon />} > Agregar Stock</Button>
