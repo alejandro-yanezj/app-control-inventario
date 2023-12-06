@@ -11,7 +11,7 @@ export const ListaVariable = ({data = {}}) =>{
             {keys.map((k,i) =>{
                 return (
                     <ListItem key = {k}>
-                    <Box sx={{fontSize:20}}> {k}: {values[i]} </ Box>
+                    <Box sx={{fontSize:'100%'}}> {k}: {values[i]} </ Box>
                     </ListItem>)
             })}
         </List>)        

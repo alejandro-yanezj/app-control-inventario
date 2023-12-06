@@ -3,17 +3,16 @@ import  { CabeceraTablaStyle } from '../../Utils/Temas'
 
 export const TablaVentas= ({ventas = [], validar=false, clientes=[]}) =>{
 
-    const encabezados = ["Codigo", "Fecha", "Cliente"]
+    const encabezados = ["Codigo venta", "Fecha compra", "Cliente"]
 
     {if(ventas!=null && ventas.length>0){
         return(
             <>
-                <Box sx={{textAlign:"left",fontSize:30, margin:5}}> Ventas: </Box>
                 <Table >
                     <TableHead >
                         <TableRow>
                             {encabezados.map(e =>{
-                                return (<TableCell key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
+                                return (<TableCell align = "center" key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
                             })}
                         </TableRow>
                     </TableHead>
@@ -22,9 +21,9 @@ export const TablaVentas= ({ventas = [], validar=false, clientes=[]}) =>{
                     {ventas.map(v => {
                         return(
                             <TableRow key = {v.idVenta}>
-                                <TableCell> {v.numero} </TableCell>
-                                <TableCell> {v.fecha} </TableCell>
-                                <TableCell>
+                                <TableCell align="center"> {v.numero} </TableCell>
+                                <TableCell align="center"> {v.fecha} </TableCell>
+                                <TableCell align="center">
                                     {clientes.map(c=>{
                                         if(c.idCliente===v.idCliente) return c.nombre
                                     })}
@@ -37,7 +36,7 @@ export const TablaVentas= ({ventas = [], validar=false, clientes=[]}) =>{
             </>
             )
     }else if(validar){
-        return(<Box sx={{textAlign:"center",fontSize:'100%', margin:'3%'}}> No existen ventas</Box>)
+        return(<Box sx={{textAlign:"center",fontSize:'100%', margin:'3%'}}> No existen ventas para cliente seleccionado</Box>)
     }
 }
 }

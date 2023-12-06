@@ -3,17 +3,16 @@ import  { CabeceraTablaStyle } from '../../Utils/Temas'
 
 export const TablaStockProductos = ({data=[], nombre}) =>{
     
-    const encabezados = ["Fecha Compra", "Precio Compra", "Stock"]
+    const encabezados = ["Fecha Compra", "Precio Compra", "Stock disponible"]
 
     {if(data!=null && data.length>0){
         return(
             <>
-                <Box sx={{textAlign:"center",fontSize:30, paddingBottom:3}}> Stock {nombre}</Box>
                 <Table >
                     <TableHead>
                         <TableRow>
                             {encabezados.map(e =>{
-                                return (<TableCell key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
+                                return (<TableCell align="center" key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
                             })}
                         </TableRow>
                     </TableHead>
@@ -22,9 +21,9 @@ export const TablaStockProductos = ({data=[], nombre}) =>{
                     {data.map(d => {
                         return(
                             <TableRow key = {d.idStock}>
-                                <TableCell> {d.fecha} </TableCell>
-                                <TableCell> {d.precio} </TableCell>
-                                <TableCell> {d.stock} </TableCell>
+                                <TableCell align="center"> {d.fecha} </TableCell>
+                                <TableCell align="center"> {d.precio} </TableCell>
+                                <TableCell align="center"> {d.stock} </TableCell>
                             </TableRow>
                             )
                         })}

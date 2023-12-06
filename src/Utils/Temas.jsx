@@ -9,12 +9,12 @@ export const ContainerRootStyle = {
 
 export const CabeceraTablaStyle = {
     color:"white", 
-    backgroundColor:"grey",
-    fontSize:20
+    backgroundColor:"#C8C8C8",
+    fontSize:'130%',
 }
 
 export const NavBarStyle = { 
-    bgcolor: 'grey',
+    bgcolor: '#C8C8C8',
     width:'100%',
     '&.MuiBottomNavigation-root':{width:'100%'}
 }
@@ -48,3 +48,19 @@ export const ContainerModalAgregarStyle = {
     borderColor:'blue',
     borderRadius:'5%'
   };
+
+ 
+export const ContainerErrorStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -100%)',
+    width: '40%',
+    height: '30%',
+    bgcolor: '#C8C8C8',
+    boxShadow: 10,
+    borderColor:'blue',
+    borderRadius:'5%',
+    display:"flex",
+    justifyContent:"center"
+};

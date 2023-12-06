@@ -1,6 +1,6 @@
 import { Container, Box, Table, TableCell, Button, Autocomplete, TextField } from "@mui/material"
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
-import PlaylistAddTwoToneIcon from '@mui/icons-material/PlaylistAddTwoTone';
+import AddShoppingCartIcon from '@mui/icons-material/PlaylistAddTwoTone';
 
 import { getClientes, getVentas } from "../../Utils/DataUtils"
 import { TablaVentas } from "../Tablas/TablaVentas";
@@ -33,15 +33,12 @@ export const Ventas = () => {
 
     }
 
-
-
-
     return (
         <Container>
             <Table sx={{ marginTop: '2%' }}>
                 <TableCell sx={{ width: '30%' }}>
 
-                    <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<AddBusinessIcon />} onClick={console.log("Agregar venta")} >Agregar Venta</Button>
+                    <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<AddShoppingCartIcon />} onClick={console.log("Agregar venta")} >Agregar Venta</Button>
 
                 </TableCell>
                 <TableCell sx={{ width: '70%' }}>

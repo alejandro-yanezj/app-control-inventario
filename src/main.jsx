@@ -1,12 +1,13 @@
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Home } from './Components/Home'
-import { AgregarProducto } from "./Components/agregar/AgregarProducto";
-import { AgregarCliente } from "./Components/agregar/AgregarCliente";
-import { Productos } from "./Components/vistaGeneral/Productos";
-import { Clientes } from "./Components/vistaGeneral/Clientes";
-import { AgregarStock } from "./Components/agregar/AgregarStockProducto"
-import { Ventas } from "./Components/vistaGeneral/Ventas";
+import { AgregarProducto } from "./Components/Agregar/AgregarProducto";
+import { AgregarCliente } from "./Components/Agregar/AgregarCliente";
+import { Productos } from "./Components/VistaGeneral/Productos";
+import { Clientes } from "./Components/VistaGeneral/Clientes";
+import { AgregarStock } from "./Components/Agregar/AgregarStockProducto"
+import { Ventas } from "./Components/VistaGeneral/Ventas";
+import { ErrorRedirectHome } from './Components/VistasError/ErrorRedirectHome'
 
 export default function App() {
   return (
@@ -15,14 +16,18 @@ export default function App() {
 
         <Route path="/app-inventario/" element={<Home />}>
           <Route path="productos" element={<Productos />}>
-            <Route path="agregar-producto" element={<AgregarProducto/>} />
+            <Route id="agregar-producto" path="agregar-producto" element={<AgregarProducto />} />
+            <Route id="agregar-stock" path="agregar-stock" element={<AgregarStock />} />
+
           </Route>
           <Route path="clientes" element={<Clientes />}>
-            <Route path="agregar-cliente"  element={<AgregarCliente />} />
+            <Route path="agregar-cliente" element={<AgregarCliente />} />
           </Route>
           <Route path="ventas" element={<Ventas />} />
-          <Route path="agregar-stock/:idProducto" element={<AgregarStock />} />
         </Route>
+        <Route path="/" element={<Navigate to="/app-inventario"/>} />
+
+        <Route path="*" element={<ErrorRedirectHome />} />
       </Routes>
     </BrowserRouter>
   );

@@ -36,11 +36,7 @@ export const Productos = () => {
         if (value != null) {
             setProductoSeleccionado(value.id);
             setNombreProductoSeleccionado(value.nombre);
-            setDatosProductoSeleccionado({
-                "Nombre": value.nombre,
-                "SKU": value.sku,
-                "Unidad": value.unidad
-            })
+            setDatosProductoSeleccionado(value)
         } else {
             setProductoSeleccionado(0);
             setNombreProductoSeleccionado(null);
@@ -60,6 +56,10 @@ export const Productos = () => {
 
     const handleClickAgregarProducto = () => {
         navigate("/app-inventario/productos/agregar-producto")
+    }
+
+    const handleClickAgregarStock = () => {
+        navigate("/app-inventario/productos/agregar-stock")
     }
 
     return (
@@ -92,7 +92,7 @@ export const Productos = () => {
                             />
                         )}
                         onChange={(event, newValue) => { handleOnChange(newValue) }}
-                        isOptionEqualToValue={(option, value) => { return value.idProducto }}
+                        isOptionEqualToValue={(option, value) => { return value.id }}
                     />
                 </TableCell>
 
@@ -100,8 +100,10 @@ export const Productos = () => {
 
             <ListaVariable data={datosProductoSeleccionado}></ListaVariable>
             <TablaStockProductos data={stockFiltrado} nombre={nombreProductoSeleccionado} estilo={CabeceraTablaStyle}></TablaStockProductos>
-            <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon />} > Agregar Stock</Button>
-            <Outlet></Outlet>
+            <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon/>} onClick={handleClickAgregarStock} > Agregar Stock</Button>
+            
+            <Outlet context={[datosProductoSeleccionado]}></Outlet>
+            
 
         </Container>)
 
