@@ -1,6 +1,7 @@
 import  { Box, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import  { CabeceraTablaStyle } from '../../Utils/Temas'
 
+
 export const TablaStockProductos = ({data=[], nombre}) =>{
     
     const encabezados = ["Fecha Compra", "Precio Compra", "Stock disponible"]

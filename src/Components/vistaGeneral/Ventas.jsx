@@ -2,29 +2,48 @@ import { Container, Box, Table, TableCell, Button, Autocomplete, TextField } fro
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import AddShoppingCartIcon from '@mui/icons-material/PlaylistAddTwoTone';
 
-import { getClientes, getVentas } from "../../Utils/DataUtils"
 import { TablaVentas } from "../Tablas/TablaVentas";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OrdenarVentasDesc } from "../../Utils/Utils";
+
+import { getVentasByIdCliente, getVentas } from "../../services/Ventas"
+import { getClientes } from "../../services/Clientes";
 
 
 export const Ventas = () => {
 
-    const clientes = getClientes();
-    const ventasTotales = OrdenarVentasDesc(getVentas());
+    const [ventasTotales, setVentasTotales] = useState([])
     const [ventas, setVentas] = useState(ventasTotales);
     const [validarVentasTabla, setValidarVentasTabla] = useState(false);
+    const [clientes, setClientes] = useState([]);
+
+
+    const getVentasService = async () => {
+        const vc = await getVentas();
+        console.log("ventas -->", vc)
+        setVentasTotales(vc);
+        setVentas(vc);
+    }
+
+    const getClientesService = async() =>{
+        const c = await getClientes();
+        setClientes(c);
+    }
+
+    const getVentasClienteService = async (idCliente) => {
+        const vc = await getVentasByIdCliente(idCliente);
+        setVentas(vc);
+    }
+
+    useEffect(() => {
+        getClientesService();
+        getVentasService();
+    }, []);
 
     const handleOnChange = (value) => {
         if (value != null) {
             setValidarVentasTabla(true);
-            let ventasCliente = [];
-            ventasTotales.map(v => {
-                if (v.idCliente === value.idCliente) {
-                    ventasCliente.push(v);
-                };
-            });
-            setVentas(ventasCliente);
+            getVentasClienteService(value.id)
         }
         else {
             setValidarVentasTabla(false);
@@ -47,7 +66,7 @@ export const Ventas = () => {
                         sx={{ marginBottom: '2%', textAlign: 'center' }}
                         options={clientes}
                         autoHighlight
-                        getOptionLabel={(option) =>  option.nombre + "  " + option.rut + "-" + option.dv}
+                        getOptionLabel={(option) => option.nombre + "  " + option.rut + "-" + option.dv}
                         renderOption={(props, option) => (
                             <Box component="li"{...props}>
                                 {option.rut + "-" + option.dv} |  {option.nombre}
@@ -69,7 +88,7 @@ export const Ventas = () => {
                 </TableCell>
 
             </Table>
-            <TablaVentas ventas={ventas} validar={validarVentasTabla} clientes={clientes}></TablaVentas>
+            <TablaVentas ventas={ventas} validar={validarVentasTabla}></TablaVentas>
 
         </Container>)
 

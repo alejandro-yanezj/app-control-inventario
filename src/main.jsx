@@ -8,6 +8,7 @@ import { Clientes } from "./Components/VistaGeneral/Clientes";
 import { AgregarStock } from "./Components/Agregar/AgregarStockProducto"
 import { Ventas } from "./Components/VistaGeneral/Ventas";
 import { ErrorRedirectHome } from './Components/VistasError/ErrorRedirectHome'
+import { DetalleVenta } from "./Components/VistaDetalle/DetalleVenta";
 
 export default function App() {
   return (
@@ -25,6 +26,8 @@ export default function App() {
           </Route>
           <Route path="ventas" element={<Ventas />} />
         </Route>
+        <Route path="/ventas/detalle/:idVenta" element={<DetalleVenta/>} />
+
         <Route path="/" element={<Navigate to="/app-inventario"/>} />
 
         <Route path="*" element={<ErrorRedirectHome />} />

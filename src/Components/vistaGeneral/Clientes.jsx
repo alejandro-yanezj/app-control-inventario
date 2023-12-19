@@ -1,11 +1,13 @@
 import { Container, Button, Box, Autocomplete, TextField, Table, TableCell } from "@mui/material"
-import { getClientes, getVentas } from "../../Utils/DataUtils"
+import { getClientes as getClientesDummy,getVentas } from "../../Utils/DataUtils"
 import { TablaVentas } from "../Tablas/TablaVentas";
 import { useState, useEffect } from "react";
 import { ListaVariable } from "../Listas/ListaVariable";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useNavigate,Outlet } from 'react-router-dom';
+import { getClientes, getClienteById } from "../../services/Clientes";
+import { getVentasByIdCliente } from '../../services/Ventas'
 
 
 export const Clientes = () => {
@@ -15,9 +17,36 @@ export const Clientes = () => {
     const [validarVentasTabla, setValidarVentasTabla] = useState(false);
     const [agregarVentaDisabled, setAgregarVentaDisabled] = useState(true);
     const [datosClienteSeleccionado, setDatosClienteSeleccionado] = useState(null);
+    const [clientes, setClientes] = useState([]);
     const navigate = useNavigate();
 
-    const clientes = getClientes();
+    const getClientesService = async() =>{
+        const c = await getClientes();
+        setClientes(c);
+    }
+
+    const getVentasClienteService = async(idCliente) =>{
+        const vc = await getVentasByIdCliente(idCliente);
+        setVentasFiltradas(vc);
+    }
+
+    const getClienteSeleccionado = async(idCliente) =>{
+        const c = await getClienteById(idCliente);
+        setDatosClienteSeleccionado({
+            "Nombre":c.nombre,
+            "Rut": c.rut + "-" + c.dv,
+            "Direccion": c.direccion,
+            "Email": c.email,
+            "Telefono": c.telefono
+        });
+        setClienteSeleccionado(c.id);
+        if(c.id !=0) getVentasClienteService(c.id)
+    }
+
+    useEffect(() => {
+        getClientesService();
+    }, []);
+
     const ventas = getVentas();
 
     const filtrarVentas = (ventas = []) => {
@@ -36,18 +65,14 @@ export const Clientes = () => {
 
     const handleOnChange = (value) => {
         if (value != null) {
-            setClienteSeleccionado(value.idCliente);
+            setClienteSeleccionado(value.id);
             setValidarVentasTabla(true);
-            setDatosClienteSeleccionado({
-                "Nombre": value.nombre,
-                "Rut": value.rut + "-" + value.dv,
-                "Direccion": value.direccion,
-                "Email": value.email,
-                "Telefono": value.telefono
-            });
+
+            console.log("value --->", value)
+            getClienteSeleccionado(value.id);
 
         } else {
-            setClienteSeleccionado(0);
+            setClienteSeleccionado({});
             setValidarVentasTabla(false);
             setDatosClienteSeleccionado(null);
         }
@@ -98,8 +123,8 @@ export const Clientes = () => {
             </Table>
 
             <ListaVariable data={datosClienteSeleccionado}></ListaVariable>
-            <TablaVentas ventas={ventasFiltradas} validar={validarVentasTabla} clientes={clientes}></TablaVentas>
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
+            <TablaVentas ventas={ventasFiltradas} validar={validarVentasTabla}></TablaVentas>
             <Outlet></Outlet>
         </Container>)
 }

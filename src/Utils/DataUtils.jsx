@@ -181,3 +181,40 @@ export const getStockProductos = () =>{
     ]
 
 }
+
+export const getDetalleVenta = () =>{
+    return {
+        "idVenta": 74,
+        "idCliente": 1,
+        "nombreCliente": "Alejandro Yañez",
+        "numeroVenta": 100066,
+        "fecha": "2023-12-18T14:23:32.479229",
+        "detalleVenta": [
+            {
+                "idProducto": 3,
+                "nombreProducto": "CHULETA CENTRO",
+                "sku": "100003",
+                "unidad": "KG",
+                "precioCompra": 3000.0,
+                "precioVenta": 4000.0,
+                "cantidad": 1,
+                "totalVenta": 4000.0,
+                "ganancia": 1000.0,
+                "gananciaPorcentual": 33.3333333333333
+            },
+            {
+                "idProducto": 3,
+                "nombreProducto": "CHULETA CENTRO",
+                "sku": "100003",
+                "unidad": "KG",
+                "precioCompra": 2100.0,
+                "precioVenta": 4000.0,
+                "cantidad": 1,
+                "totalVenta": 4000.0,
+                "ganancia": 1900.0,
+                "gananciaPorcentual": 90.4761904761905
+            }
+        ]
+    }
+
+}

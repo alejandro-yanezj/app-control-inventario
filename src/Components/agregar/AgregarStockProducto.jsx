@@ -40,7 +40,6 @@ export const AgregarStock = () => {
         return true;
     }
 
-
     return (
         <>
             {datosProductoSeleccionado!=null && <Modal
