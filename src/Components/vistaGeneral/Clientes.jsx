@@ -18,6 +18,7 @@ export const Clientes = () => {
     const [agregarVentaDisabled, setAgregarVentaDisabled] = useState(true);
     const [datosClienteSeleccionado, setDatosClienteSeleccionado] = useState(null);
     const [clientes, setClientes] = useState([]);
+    const from = "clientes"
     const navigate = useNavigate();
 
     const getClientesService = async() =>{
@@ -125,6 +126,6 @@ export const Clientes = () => {
             <ListaVariable data={datosClienteSeleccionado}></ListaVariable>
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
             <TablaVentas ventas={ventasFiltradas} validar={validarVentasTabla}></TablaVentas>
-            <Outlet></Outlet>
+            <Outlet context={[from]}></Outlet>
         </Container>)
 }

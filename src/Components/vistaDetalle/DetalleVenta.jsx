@@ -1,65 +1,149 @@
-import { Box, Container, List, ListItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Container, Grid, IconButton, List, ListItem, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { getDetalleVenta } from "../../Utils/DataUtils"
 import { ListaVariable } from "../Listas/ListaVariable";
-import { CabeceraTablaStyle } from "../../Utils/Temas";
-import { useParams } from 'react-router-dom'
+import { CabeceraTablaStyle, ModalDetalleVenta } from "../../Utils/Temas";
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
+import { useEffect, useState } from "react";
+import { makeStyles } from "@mui/styles";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ShoppingCartCheckoutOutlinedIcon from '@mui/icons-material/ShoppingCartCheckoutOutlined';
+import { getVentaById } from "../../services/Ventas";
 
 
 export const DetalleVenta = () => {
 
-    const encabezados = ["Nombre Producto", "SKU","Unidad", "Cantidad", "P. Compra", "P. Venta","Total", "Ganancia $","Ganancia %"]
+    const encabezados = ["Nombre Producto", "SKU", "Unidad", "Cantidad", "P. Compra", "P. Venta", "Total", "Ganancia $", "Ganancia %"]
+    const [openModal, setopenModal] = useState(true);
+    const [detalleVenta, setdetalleVenta] = useState(null);
+    const navigate = useNavigate();
+    const [from] = useOutletContext();
 
     const routeParams = useParams();
-    console.log("props --> ",routeParams);
 
+    const useStyles = makeStyles({
+        table: {
+            minWidth: 650,
+        },
+        tableContainer: {
+            maxHeight: '300px',
+            overflowY: 'auto',
+        },
+        tableHeader: {
+            position: 'sticky',
+            top: 0,
+            zIndex: 1,
+            backgroundColor: '#C8C8C8',
+            color: 'blue'
+        },
+    });
+    const classes = useStyles();
+
+    const handleButtonVolver = () => {
+        navigate(`/app-inventario/${from}`)
+    }
     const idVenta = routeParams.idVenta
 
-    const detalleVenta = getDetalleVenta();
+    debugger
+    const getVentaService = async () => {
+        const venta = await getVentaById(idVenta);
+        if (venta != null) {
+            setdetalleVenta(venta);
+        }
+        else{
+            navigate(`/app-inventario/${from}`)
+        }
+    }
 
 
-    return (
-        <Container>
-            <List>
-                <ListItem>
-                    <Box sx={{ fontSize: '100%' }}> Numero: {detalleVenta.numeroVenta} </ Box>
-                </ListItem>
 
-                <ListItem>
-                    <Box sx={{ fontSize: '100%' }}> Cliente: {detalleVenta.nombreCliente} </ Box>
-                </ListItem>
+    const handleCloseModal = () => {
+        console.log("cerrando modal")
+    }
 
-                <ListItem>
-                    <Box sx={{ fontSize: '100%' }}> Fecha : {detalleVenta.fecha} </ Box>
-                </ListItem>
-            </List>
+    useEffect(() => {
+        getVentaService();
+    }, []);
 
-            <Table>
-                <TableHead >
-                    <TableRow>
-                        {encabezados.map(e => {
-                            return (<TableCell align="center" key={e} sx={CabeceraTablaStyle} > {e} </TableCell>)
-                        })}
-                    </TableRow>
-                </TableHead>
+    if (detalleVenta != null) {
+        return (
 
-                <TableBody>
-                    {detalleVenta.detalleVenta.map(d => {
-                        return(
-                            <TableRow key = {d.idProducto}>
-                                <TableCell align="center"> {d.nombreProducto} </TableCell>
-                                <TableCell align="center"> {d.sku} </TableCell>
-                                <TableCell align="center"> {d.unidad} </TableCell>
-                                <TableCell align="center"> {d.cantidad} </TableCell>
-                                <TableCell align="center"> {d.precioCompra} </TableCell>
-                                <TableCell align="center"> {d.precioVenta} </TableCell>
-                                <TableCell align="center"> {d.totalVenta} </TableCell>
-                                <TableCell align="center"> {d.ganancia} </TableCell>
-                                <TableCell align="center"> {d.gananciaPorcentual} </TableCell>
-                            </TableRow>
-                            )
-                        })}
-                    </TableBody>
-            </Table>
-        </Container>
-    )
+            <Modal open={openModal} onClose={handleCloseModal}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        maxWidth: '100%', // Ajusta el ancho del modal según tus necesidades
+                        maxHeight: '90%', // Ajusta la altura máxima del modal según tus necesidades
+                        overflow: 'hidden', // Para evitar el desbordamiento
+                    }}
+                >
+
+                    <Typography variant="h5" gutterBottom align="center">
+                        Detalles de la Venta
+                    </Typography>
+
+                    <Box mb={2} sx={{ textAlign: 'left' }}>
+                        <Typography variant="body1">
+                            Número: {detalleVenta.numeroVenta}
+                        </Typography>
+                        <Typography variant="body1">
+                            Cliente: {detalleVenta.nombreCliente}
+                        </Typography>
+                        <Typography variant="body1">
+                            Fecha: {detalleVenta.fecha}
+                        </Typography>
+                    </Box>
+
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2%' }}>
+                        <IconButton color="error" onClick={handleButtonVolver}>
+                            <ArrowBackIosIcon />
+                            Volver
+                        </IconButton>
+
+                        <IconButton color="success">
+                            Generar venta a partir de actual <ShoppingCartCheckoutOutlinedIcon />
+                        </IconButton>
+                    </Box>
+
+                    <TableContainer component={Paper} className={classes.tableContainer}>
+                        <Table className={classes.table}>
+                            <TableHead className={classes.tableHeader}>
+                                <TableRow>
+                                    {encabezados.map((e) => (
+                                        <TableCell align="center" sx={{ color: 'white' }} key={e}>
+                                            {e}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+
+                                {detalleVenta.detalleVenta.map((d) => (
+                                    <TableRow key={d.idProducto}>
+                                        <TableCell align="center">{d.nombreProducto}</TableCell>
+                                        <TableCell align="center">{d.sku}</TableCell>
+                                        <TableCell align="center">{d.unidad}</TableCell>
+                                        <TableCell align="center">{d.cantidad}</TableCell>
+                                        <TableCell align="center">{d.precioCompra}</TableCell>
+                                        <TableCell align="center">{d.precioVenta}</TableCell>
+                                        <TableCell align="center">{d.totalVenta}</TableCell>
+                                        <TableCell align="center">{d.ganancia}</TableCell>
+                                        <TableCell align="center">{d.gananciaPorcentual}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Box>
+            </Modal>
+
+
+        )
+    }
 }

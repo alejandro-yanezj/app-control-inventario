@@ -4,10 +4,9 @@ import AddShoppingCartIcon from '@mui/icons-material/PlaylistAddTwoTone';
 
 import { TablaVentas } from "../Tablas/TablaVentas";
 import { useEffect, useState } from "react";
-import { OrdenarVentasDesc } from "../../Utils/Utils";
-
 import { getVentasByIdCliente, getVentas } from "../../services/Ventas"
 import { getClientes } from "../../services/Clientes";
+import { Outlet } from "react-router-dom";
 
 
 export const Ventas = () => {
@@ -16,6 +15,7 @@ export const Ventas = () => {
     const [ventas, setVentas] = useState(ventasTotales);
     const [validarVentasTabla, setValidarVentasTabla] = useState(false);
     const [clientes, setClientes] = useState([]);
+    const from = "ventas"
 
 
     const getVentasService = async () => {
@@ -89,6 +89,8 @@ export const Ventas = () => {
 
             </Table>
             <TablaVentas ventas={ventas} validar={validarVentasTabla}></TablaVentas>
+
+            <Outlet context={[from]}></Outlet>
 
         </Container>)
 

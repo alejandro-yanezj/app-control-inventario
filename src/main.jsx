@@ -23,12 +23,14 @@ export default function App() {
           </Route>
           <Route path="clientes" element={<Clientes />}>
             <Route path="agregar-cliente" element={<AgregarCliente />} />
+            <Route path="detalle-venta/:idVenta" element={<DetalleVenta />} />
           </Route>
-          <Route path="ventas" element={<Ventas />} />
+          <Route path="ventas" element={<Ventas />}>
+            <Route path="detalle-venta/:idVenta" element={<DetalleVenta />} />
+          </Route>
         </Route>
-        <Route path="/ventas/detalle/:idVenta" element={<DetalleVenta/>} />
 
-        <Route path="/" element={<Navigate to="/app-inventario"/>} />
+        <Route path="/" element={<Navigate to="/app-inventario" />} />
 
         <Route path="*" element={<ErrorRedirectHome />} />
       </Routes>

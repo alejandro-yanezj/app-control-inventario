@@ -9,7 +9,7 @@ export const getClientes = async() => {
         return response.data;
     } catch(error){
         console.log(error)
-        return null
+        return []
     }  
 }
 
@@ -19,6 +19,6 @@ export const getClienteById = async(idCliente) => {
         return response.data
     } catch(error){
         console.log(error)
-        return null
+        return []
     }  
 }

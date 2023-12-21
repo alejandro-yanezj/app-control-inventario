@@ -9,7 +9,7 @@ export const getProductos = async () => {
         return response.data;
     } catch (error) {
         console.log(error)
-        return null
+        return []
     }
 }
 
@@ -20,7 +20,7 @@ export const getProductoStockByIdProducto = async (idProducto) => {
         return response.data;
     } catch (error) {
         console.log(error)
-        return null
+        return []
     }
 
 }
