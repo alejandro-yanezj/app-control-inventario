@@ -22,3 +22,23 @@ export const getClienteById = async(idCliente) => {
         return []
     }  
 }
+
+export const addCliente = async (nombre= "",rut="", dv = "", direccion="", telefono ="", email = "") =>{
+    try{
+        debugger
+        const cliente = {
+            "nombre":nombre,
+            "rut":rut,
+            "dv":dv,
+            "direccion":direccion,
+            "telefono":telefono,
+            "email":email
+        };
+        const response = await axios.put(`${basePath}/agregar`, cliente)
+        return response.data;
+    }catch(error){
+        console.log(error)
+        return error.response.data;
+    }
+
+}

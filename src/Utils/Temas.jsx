@@ -36,11 +36,15 @@ export const ContainerModalAgregarStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '85%',
     bgcolor: 'white',
-    boxShadow: 10,
-    borderRadius: '2%',
+    boxShadow: 24,
+    p: 4,
+    maxWidth: '90%',
+    maxHeight: '90vh',
+    overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
 };
 
 export const ModalDetalleVenta = {
@@ -62,28 +66,46 @@ export const ContainerModalConfirmacionStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -30%)',
-    width: '40%',
-    height: '30%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'white',
     boxShadow: 24,
-    borderColor: 'blue',
-    borderRadius: '5%'
+    p: 2,
+    width: '30%',
+    maxWidth: '90%', // Ancho máximo para dispositivos grandes
+    maxHeight: '60vh', // Altura máxima para dispositivos grandes
+    overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
 };
 
 
-export const ContainerErrorStyle = {
+export const TablaScrollStyle = {
+    table: {
+        minWidth: 650,
+    },
+    tableContainer: {
+        maxHeight: '300px',
+        overflowY: 'auto',
+    },
+    tableHeader: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+        backgroundColor: '#C8C8C8',
+        color: 'blue'
+    },
+}
+
+export const ModalDetalleVentaStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -100%)',
-    width: '40%',
-    height: '30%',
-    bgcolor: '#C8C8C8',
-    boxShadow: 10,
-    borderColor: 'blue',
-    borderRadius: '5%',
-    display: "flex",
-    justifyContent: "center"
-};
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    maxWidth: '100%', // Ajusta el ancho del modal según tus necesidades
+    maxHeight: '90%', // Ajusta la altura máxima del modal según tus necesidades
+    overflow: 'hidden', // Para evitar el desbordamiento
+}

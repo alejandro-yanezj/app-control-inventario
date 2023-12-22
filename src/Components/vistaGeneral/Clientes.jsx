@@ -33,20 +33,36 @@ export const Clientes = () => {
 
     const getClienteSeleccionado = async(idCliente) =>{
         const c = await getClienteById(idCliente);
-        setDatosClienteSeleccionado({
-            "Nombre":c.nombre,
-            "Rut": c.rut + "-" + c.dv,
-            "Direccion": c.direccion,
-            "Email": c.email,
-            "Telefono": c.telefono
-        });
-        setClienteSeleccionado(c.id);
-        if(c.id !=0) getVentasClienteService(c.id)
+        if (c!=null){
+            setDatosClienteSeleccionado({
+                "Nombre":c.nombre,
+                "Rut": c.rut + "-" + c.dv,
+                "Direccion": c.direccion,
+                "Email": c.email,
+                "Telefono": c.telefono
+            });
+            setClienteSeleccionado(c.id);
+            getVentasClienteService(c.id)
+        }
+        else{
+            setDatosClienteSeleccionado(0)
+        }
+        
     }
 
     useEffect(() => {
         getClientesService();
     }, []);
+
+    useEffect(() => {
+        debugger
+        if(clienteSeleccionado!= null && clienteSeleccionado !=0){
+            setAgregarVentaDisabled(false)
+        }
+        else{
+            setAgregarVentaDisabled(true)
+        }
+    }, [clienteSeleccionado]);
 
     const ventas = getVentas();
 
@@ -65,35 +81,27 @@ export const Clientes = () => {
     }
 
     const handleOnChange = (value) => {
+        debugger
         if (value != null) {
             setClienteSeleccionado(value.id);
             setValidarVentasTabla(true);
-
-            console.log("value --->", value)
             getClienteSeleccionado(value.id);
 
         } else {
-            setClienteSeleccionado({});
+            setClienteSeleccionado(0);
             setValidarVentasTabla(false);
             setDatosClienteSeleccionado(null);
+            setVentasFiltradas(null)
         }
     }
-
-    useEffect(() => {
-        filtrarVentas(ventas)
-        if (clienteSeleccionado == 0) {
-            setAgregarVentaDisabled(true);
-        }
-        else {
-            setAgregarVentaDisabled(false);
-        }
-    }, [clienteSeleccionado]);
 
     return (
         <Container>
             <Table sx={{marginTop:'2%'}}>
                 <TableCell sx={{width:'30%'}}>
                     <Button variant="contained" color="success" endIcon={<PersonAddIcon />} onClick={handleClickAgregarCliente} >Agregar Cliente</Button>
+                    <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
+
                 </TableCell>
                 <TableCell sx={{width:'80%'}}>
                     <Autocomplete
@@ -121,10 +129,10 @@ export const Clientes = () => {
                         isOptionEqualToValue={(option, value) => { return value.idCliente }}
                     />
                 </TableCell>
+
             </Table>
 
             <ListaVariable data={datosClienteSeleccionado}></ListaVariable>
-            <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
             <TablaVentas ventas={ventasFiltradas} validar={validarVentasTabla}></TablaVentas>
             <Outlet context={[from]}></Outlet>
         </Container>)

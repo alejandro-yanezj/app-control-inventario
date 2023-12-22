@@ -22,5 +22,21 @@ export const getProductoStockByIdProducto = async (idProducto) => {
         console.log(error)
         return []
     }
+}
+
+export const addProducto = async (nombre= "",sku="", unidad = "") =>{
+    try{
+        debugger
+        const producto = {
+            "nombre":nombre,
+            "sku":sku,
+            "unidad":unidad
+        };
+        const response = await axios.put(`${basePath}/agregar`, producto)
+        return response.data;
+    }catch(error){
+        console.log(error)
+        return error.response.data;
+    }
 
 }

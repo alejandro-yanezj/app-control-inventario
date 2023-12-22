@@ -1,7 +1,7 @@
 import { Box, Container, Grid, IconButton, List, ListItem, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { getDetalleVenta } from "../../Utils/DataUtils"
 import { ListaVariable } from "../Listas/ListaVariable";
-import { CabeceraTablaStyle, ModalDetalleVenta } from "../../Utils/Temas";
+import { CabeceraTablaStyle, ModalDetalleVenta, ModalDetalleVentaStyle } from "../../Utils/Temas";
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
@@ -69,18 +69,7 @@ export const DetalleVenta = () => {
 
             <Modal open={openModal} onClose={handleCloseModal}>
                 <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 4,
-                        maxWidth: '100%', // Ajusta el ancho del modal según tus necesidades
-                        maxHeight: '90%', // Ajusta la altura máxima del modal según tus necesidades
-                        overflow: 'hidden', // Para evitar el desbordamiento
-                    }}
+                    sx={ModalDetalleVentaStyle}
                 >
 
                     <Typography variant="h5" gutterBottom align="center">

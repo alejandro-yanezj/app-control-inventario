@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 
 import { Button, Container, List, ListItem, TextField, Modal, Box, Table, TableCell, TableHead, Typography, Alert, TableBody, TableRow } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { ContainerModalAgregarStyle, ContainerModalConfirmacionStyle } from '../../Utils/Temas'
 import { ModalConfirmacion } from "../Modals/ModalConfirmacion";
+import { addCliente } from "../../services/Clientes";
+import { ModalInformacion } from "../Modals/ModalInformacion";
 
 export const AgregarCliente = () => {
 
     const [openModal, setOpenModal] = useState(true)
     const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
+    const [openModalInformacion, setOpenModalInformacion] = useState(false);
+    const [codigoRespuestaAgregarCliente, setCodigoRespuestaAgregarCliente] = useState("")
+    const [mensajeRespuestaAgregar, setMensajeRespuestaAgregar] = useState(null);
     const [nombreCliente, setNombreCliente] = useState(null);
+    const [rutConDV, setRutConDV] = useState(null);
     const [rut, setRut] = useState(null);
+    const [dv, setDv] = useState(null);
+    const [direccion, setDireccion] = useState(null);
     const [telefono, setTelefono] = useState(null);
     const [email, setEmail] = useState(null);
 
@@ -22,6 +30,14 @@ export const AgregarCliente = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+
+    }, [codigoRespuestaAgregarCliente]);
+
+    useEffect(() => {
+
+    }, [mensajeRespuestaAgregar]);
+
     const handleClickCancelar = () => {
         setOpenModal(false);
         navigate("/app-inventario/clientes");
@@ -30,6 +46,7 @@ export const AgregarCliente = () => {
     const validarCliente = () => {
         if (validarNombre()
             && validarRut()
+            && validarDireccion()
             && validarTelefono()
             && validarEmail()) {
             return true;
@@ -42,21 +59,18 @@ export const AgregarCliente = () => {
         if (nombreCliente === null || nombreCliente.length < 1) {
             mostrarAlerta("error", "Debe ingresar nombre cliente");
             return false;
-            //ingresar rut;
         }
         return true;
-        //agregar mas validaciones
     }
 
     const validarRut = () => {
         console.log("validando rut")
-        if (rut === null || rut.length < 1) {
+        if (rutConDV === null || rutConDV.length < 1) {
             mostrarAlerta("error", "Debe ingresar rut cliente");
             return false;
             //ingresar rut;
         }
-        return true;
-        //validar modulo 11
+        return validacionRutModulo11();
     }
 
     const validarTelefono = () => {
@@ -64,10 +78,8 @@ export const AgregarCliente = () => {
         if (telefono === null || telefono.length < 1) {
             mostrarAlerta("error", "Debe ingresar telefono cliente");
             return false;
-            //ingresar rut;
         }
         return true;
-        //validar modulo 11
     }
 
     const validarEmail = () => {
@@ -81,8 +93,33 @@ export const AgregarCliente = () => {
         //validar modulo 11
     }
 
+    const validarDireccion = () => {
+        console.log("validando email")
+        if (direccion === null || direccion.length < 1) {
+            mostrarAlerta("error", "Debe ingresar direccion cliente");
+            return false;
+            //ingresar rut;
+        }
+        return true;
+        //validar modulo 11
+    }
+
+    const validacionRutModulo11 = () => {
+        //agregar la validacion de modulo 11 real
+        if (rutConDV.length > 0) {
+            let rut = rutConDV.replace("-", "");
+            const dv = rut.substring((rut.length - 1))
+            rut = rut.substring(0, rut.length - 1)
+            setRut(rut);
+            setDv(dv);
+            return true;
+        }
+        mostrarAlerta("error", "El rut ingresado es invalido");
+        return false;
+    }
+
     const mostrarAlerta = (tipoAlerta, mensaje) => {
-        if(showAlert) return
+        if (showAlert) return
         setAlertSeverity(tipoAlerta);
         setAlertContent(mensaje);
         setTimeout(() => {
@@ -95,8 +132,21 @@ export const AgregarCliente = () => {
         setOpenModalConfirmacion(false);
     }
 
-    const handleClickConfirmarInfo = () => {
-        return true;
+    const handleClickOK = () => {
+        if (codigoRespuestaAgregarCliente === "200") {
+            setOpenModalInformacion(false);
+            navigate("/app-inventario/clientes");
+        } else {
+            setOpenModalInformacion(false);
+        }
+    }
+
+    const handleClickConfirmarInfo = async () => {
+        const response = await addCliente(nombreCliente, rut, dv, direccion, telefono, email);
+        setCodigoRespuestaAgregarCliente(response.codigo)
+        setMensajeRespuestaAgregar(response.mensaje)
+        setOpenModalInformacion(true);
+        setOpenModalConfirmacion(false);
     }
 
     const handleClickButtonGuardar = () => {
@@ -111,14 +161,17 @@ export const AgregarCliente = () => {
 
     const handleOnChangeRut = (e) => {
         //validar (?)
-        setRut(e.target.value)
-
-
+        setRutConDV(e.target.value)
     }
+
+    const handleOnChangeDireccion = (e) => {
+        //validar (?)
+        setDireccion(e.target.value)
+    }
+
     const handleOnChangeTelefono = (e) => {
         //validar (?)
         setTelefono(e.target.value)
-
     }
 
     const handleOnChangeEmail = (e) => {
@@ -127,41 +180,63 @@ export const AgregarCliente = () => {
 
     }
 
+    const handleCloseModal = () => {
+        console.log("cerrando modal")
+    }
+
+    const renderAlert = () => {
+        if (showAlert) {
+            return (
+                <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>
+                    {alertContent}
+                </Alert>
+            );
+        }
+        return null;
+    };
+
     return (
         <>
-            <Modal
-                open={openModal}
-                onClose={console.log("cerrando modal")}>
-                <Container sx={ContainerModalAgregarStyle} >
-                    <Box sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}>Agregar Cliente</Box>
-                    <List>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Nombre Cliente" onChange={handleOnChangeNombre} />
-                        </ListItem>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Rut" variant="outlined" onChange={handleOnChangeRut} />
-                        </ListItem>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Telefono" variant="outlined" onChange={handleOnChangeTelefono} />
-                        </ListItem>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Email" variant="outlined" onChange={handleOnChangeEmail} />
-                        </ListItem>
-                    </List>
-                    <Typography align="center">
-                        <Button sx={{ margin: 2 }}
-                            variant="contained" color="error" onClick={handleClickCancelar}> Cancelar</Button>
-                        <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}> Guardar</Button>
-                        {showAlert && <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>{alertContent}</Alert>}
-                    </Typography >
+            <Modal open={openModal} onClose={handleCloseModal}>
+                <Container sx={ContainerModalAgregarStyle}>
+                    <Typography sx={{ fontSize: '200%', marginBottom: '20px' }}>Agregar Cliente</Typography>
+                    <Box sx={{ width: '80%' }}>
+                        <List>
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <TextField sx={{ width: '80%' }} label="Nombre Cliente" onChange={handleOnChangeNombre} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <TextField sx={{ width: '80%' }} label="Rut" variant="outlined" onChange={handleOnChangeRut} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <TextField sx={{ width: '80%' }} label="Direccion" variant="outlined" onChange={handleOnChangeDireccion} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <TextField sx={{ width: '80%' }} label="Telefono" variant="outlined" onChange={handleOnChangeTelefono} />
+                            </ListItem>
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <TextField sx={{ width: '80%' }} label="Email" variant="outlined" onChange={handleOnChangeEmail} />
+                            </ListItem>
+                        </List>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Button sx={{ margin: 2 }} variant="contained" color="error" onClick={handleClickCancelar}>Cancelar</Button>
+                        <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}>Guardar</Button>
+                    </Box>
+                    {renderAlert()}
                     <ModalConfirmacion
-                     openModalConfirmacion={openModalConfirmacion}
-                     mensaje={"¿Confirma que desea agregar cliente?"}
-                     handleClickCancelarInfo={handleClickCancelarInfo}
-                     handleClickConfirmarInfo={handleClickConfirmarInfo}
-                     />
-                </Container >
-            </Modal >
+                        openModalConfirmacion={openModalConfirmacion}
+                        mensaje={"¿Confirma que desea agregar cliente?"}
+                        handleClickCancelarInfo={handleClickCancelarInfo}
+                        handleClickConfirmarInfo={handleClickConfirmarInfo}
+                    />
+                    <ModalInformacion
+                        openModalInformacion={openModalInformacion}
+                        mensaje={mensajeRespuestaAgregar}
+                        handleClickOK={handleClickOK}
+                    />
+                </Container>
+            </Modal>
         </>
     )
 

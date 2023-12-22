@@ -1,25 +1,30 @@
 import React, { useState } from "react";
-import { Button, Container, List,ListItem , TextField, Modal, Box,Typography,Alert} from "@mui/material";
+import { Button, Container, List, ListItem, TextField, Modal, Box, Typography, Alert } from "@mui/material";
 import { ContainerModalAgregarStyle } from "../../Utils/Temas";
 import { ModalConfirmacion } from "../Modals/ModalConfirmacion";
 import { useNavigate } from "react-router-dom";
+import { ModalInformacion } from "../Modals/ModalInformacion";
+import { addProducto } from "../../services/Productos";
 
 
 
-export const AgregarProducto = () =>{
+export const AgregarProducto = () => {
 
     const [openModal, setOpenModal] = useState(true)
     const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
     const [nombreProducto, setNombreProducto] = useState(null);
     const [sku, setSku] = useState(null);
     const [unidad, setUnidad] = useState(null);
+    const [openModalInformacion, setOpenModalInformacion] = useState(false);
+    const [codigoRespuestaAgregar, setCodigoRespuestaAgregar] = useState("")
+    const [mensajeRespuestaAgregar, setMensajeRespuestaAgregar] = useState(null);
 
-     //alert
-     const [showAlert, setShowAlert] = useState(false);
-     const [alertSeverity, setAlertSeverity] = useState("info");
-     const [alertContent, setAlertContent] = useState("Contenido de alerta por defecto!");
+    //alert
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertSeverity, setAlertSeverity] = useState("info");
+    const [alertContent, setAlertContent] = useState("Contenido de alerta por defecto!");
 
-     const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleClickCancelar = () => {
         setOpenModal(false);
@@ -27,7 +32,7 @@ export const AgregarProducto = () =>{
     }
 
     const mostrarAlerta = (tipoAlerta, mensaje) => {
-        if(showAlert) return
+        if (showAlert) return
         setAlertSeverity(tipoAlerta);
         setAlertContent(mensaje);
         setTimeout(() => {
@@ -40,8 +45,13 @@ export const AgregarProducto = () =>{
         setOpenModalConfirmacion(false);
     }
 
-    const handleClickConfirmarInfo = () => {
-        return true;
+   
+    const handleClickConfirmarInfo = async () => {
+        const response = await addProducto(nombreProducto, sku, unidad);
+        setCodigoRespuestaAgregar(response.codigo)
+        setMensajeRespuestaAgregar(response.mensaje)
+        setOpenModalInformacion(true);
+        setOpenModalConfirmacion(false);
     }
 
     const handleClickButtonGuardar = () => {
@@ -54,77 +64,91 @@ export const AgregarProducto = () =>{
         setNombreProducto(e.target.value);
     }
 
-    const handleOnChangeSku = (e) =>{
+    const handleOnChangeSku = (e) => {
         setSku(e.target.value);
     }
 
-    const handleOnChangeUnidad = (e) =>{
+    const handleOnChangeUnidad = (e) => {
         setUnidad(e.target.value)
     }
 
-    const validarProducto = () =>{
+    const validarProducto = () => {
         if (validarNombre()
-        && validarSku()
-        && validarUnidad()){
+            && validarSku()
+            && validarUnidad()) {
             return true;
         }
         return false;
     }
 
-    const validarNombre = ()=>{
-        if (nombreProducto=== null || nombreProducto.length===0){
+    const validarNombre = () => {
+        if (nombreProducto === null || nombreProducto.length === 0) {
             mostrarAlerta("error", "Se debe ingresar nombre producto");
             return false;
         }
         return true;
     }
 
-    const validarSku= () =>{
-        if(sku===null || sku.length===0){
-            mostrarAlerta("error","Se debe ingresar sku");
+    const validarSku = () => {
+        if (sku === null || sku.length === 0) {
+            mostrarAlerta("error", "Se debe ingresar sku");
             return false;
         }
         return true;
     }
 
-    const validarUnidad = () =>{
-        if (unidad===null || unidad.length ===0){
-            mostrarAlerta("error","Se debe ingresar unidad");
+    const validarUnidad = () => {
+        if (unidad === null || unidad.length === 0) {
+            mostrarAlerta("error", "Se debe ingresar unidad");
             return false;
         }
         return true;
     }
+
+    const handleClickOK = () => {
+        debugger
+        if (codigoRespuestaAgregar=== "200") {
+            setOpenModalInformacion(false);
+            navigate("/app-inventario/productos");
+        } else {
+            setOpenModalInformacion(false);
+        }
+    }
+
 
     return (
-        <Modal
-                open={openModal}
-                onClose={console.log("cerrando modal")}>
-                <Container sx={ContainerModalAgregarStyle} >
-                    <Box sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}>Agregar Producto</Box>
-                    <List>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Nombre Producto" onChange={handleOnChangeNombre} />
-                        </ListItem>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Sku" variant="outlined" onChange={handleOnChangeSku} />
-                        </ListItem>
-                        <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }} label="Unidad" variant="outlined" onChange={handleOnChangeUnidad} />
-                        </ListItem>
-                    </List>
-                    <Typography align="center">
-                        <Button sx={{ margin: 2 }}
-                            variant="contained" color="error" onClick={handleClickCancelar}> Cancelar</Button>
-                        <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}> Guardar</Button>
-                        {showAlert && <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>{alertContent}</Alert>}
-                    </Typography >
-                    <ModalConfirmacion
-                     openModalConfirmacion={openModalConfirmacion}
-                     mensaje={"¿Confirma que desea agregar producto?"}
-                     handleClickCancelarInfo={handleClickCancelarInfo}
-                     handleClickConfirmarInfo={handleClickConfirmarInfo}
-                     />
-                </Container >
-            </Modal >
+        <Modal open={openModal} onClose={() => console.log("cerrando modal")}>
+            <Container sx={ContainerModalAgregarStyle}>
+                <Typography sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}>Agregar Producto</Typography>
+                <List sx={{ width: '100%' }}>
+                    <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <TextField sx={{ width: '80%' }} label="Nombre Producto" onChange={handleOnChangeNombre} />
+                    </ListItem>
+                    <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <TextField sx={{ width: '80%' }} label="Sku" variant="outlined" onChange={handleOnChangeSku} />
+                    </ListItem>
+                    <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <TextField sx={{ width: '80%' }} label="Unidad" variant="outlined" onChange={handleOnChangeUnidad} />
+                    </ListItem>
+                </List>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <Button sx={{ margin: 2 }} variant="contained" color="error" onClick={handleClickCancelar}>Cancelar</Button>
+                    <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}>Guardar</Button>
+                </Box>
+                {showAlert && <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>{alertContent}</Alert>}
+                <ModalConfirmacion
+                    openModalConfirmacion={openModalConfirmacion}
+                    mensaje={"¿Confirma que desea agregar producto?"}
+                    handleClickCancelarInfo={handleClickCancelarInfo}
+                    handleClickConfirmarInfo={handleClickConfirmarInfo}
+                />
+
+                <ModalInformacion
+                    openModalInformacion={openModalInformacion}
+                    mensaje={mensajeRespuestaAgregar}
+                    handleClickOK={handleClickOK}
+                />
+            </Container>
+        </Modal>
     )
 }
