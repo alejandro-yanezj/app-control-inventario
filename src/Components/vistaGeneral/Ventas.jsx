@@ -6,7 +6,7 @@ import { TablaVentas } from "../Tablas/TablaVentas";
 import { useEffect, useState } from "react";
 import { getVentasByIdCliente, getVentas } from "../../services/Ventas"
 import { getClientes } from "../../services/Clientes";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 
 export const Ventas = () => {
@@ -16,6 +16,9 @@ export const Ventas = () => {
     const [validarVentasTabla, setValidarVentasTabla] = useState(false);
     const [clientes, setClientes] = useState([]);
     const from = "ventas"
+
+    const navigate = useNavigate();
+
 
 
     const getVentasService = async () => {
@@ -51,6 +54,10 @@ export const Ventas = () => {
         }
 
     }
+
+    const handleOnClickAgregarVenta = () =>{
+        navigate("/app-inventario/ventas/generar-venta")
+    }
     
 
     return (
@@ -58,7 +65,7 @@ export const Ventas = () => {
             <Table sx={{ marginTop: '2%' }}>
                 <TableCell sx={{ width: '30%' }}>
 
-                    <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<AddShoppingCartIcon />} onClick={console.log("Agregar venta")} >Agregar Venta</Button>
+                    <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<AddShoppingCartIcon />} onClick={handleOnClickAgregarVenta} >Agregar Venta</Button>
 
                 </TableCell>
                 <TableCell sx={{ width: '70%' }}>

@@ -9,6 +9,7 @@ import { AgregarStock } from "./Components/Agregar/AgregarStockProducto"
 import { Ventas } from "./Components/VistaGeneral/Ventas";
 import { ErrorRedirectHome } from './Components/VistasError/ErrorRedirectHome'
 import { DetalleVenta } from "./Components/VistaDetalle/DetalleVenta";
+import { AgregarVenta } from "./Components/agregar/AgregarVenta";
 
 export default function App() {
   return (
@@ -24,9 +25,11 @@ export default function App() {
           <Route path="clientes" element={<Clientes />}>
             <Route path="agregar-cliente" element={<AgregarCliente />} />
             <Route path="detalle-venta/:idVenta" element={<DetalleVenta />} />
+            <Route path="generar-venta" element={<AgregarVenta/>}/>
           </Route>
           <Route path="ventas" element={<Ventas />}>
             <Route path="detalle-venta/:idVenta" element={<DetalleVenta />} />
+            <Route path="generar-venta" element={<AgregarVenta/>}/>
           </Route>
         </Route>
 

@@ -7,7 +7,7 @@ import { makeStyles } from "@mui/styles";
 
 export const TablaVentas = ({ ventas = [], validar = false }) => {
 
-    const encabezados = ["", "Codigo venta", "Fecha compra", "Cliente"]
+    const encabezados = ["Detalle", "Número venta", "Monto" ,"Fecha compra", "Cliente"]
 
     const navigate = useNavigate();
 
@@ -51,13 +51,14 @@ export const TablaVentas = ({ ventas = [], validar = false }) => {
                                 {ventas.map(v => {
                                     return (
                                         <TableRow key={v.idVenta}>
-                                            <TableCell>
-                                                <IconButton color="primary" onClick={() => handleOnClick(v.idVenta)}>
+                                            <TableCell align="center">
+                                                <IconButton  color="primary" onClick={() => handleOnClick(v.idVenta)}>
                                                     <DescriptionOutlinedIcon />
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell align="center">
-                                                {v.numero} </TableCell>
+                                            <TableCell align="center"> {v.numero} </TableCell>
+                                            <TableCell align="center"> {v.monto} </TableCell>
+
                                             <TableCell align="center"> {v.fecha} </TableCell>
                                             <TableCell align="center"> {v.nombreCliente} </TableCell>
                                         </TableRow>

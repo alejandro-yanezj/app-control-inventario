@@ -21,13 +21,13 @@ export const Productos = () => {
     const [stockProductoSeleccionado, setStockProductoSeleccionado] = useState([]);
     const navigate = useNavigate();
 
-    const getProductosService = async() =>{
+    const getProductosService = async () => {
         const p = await getProductos();
         setproductos(p);
     }
-    const getProductoStockSeleccionado = async(productoSeleccionado) =>{
+    const getProductoStockSeleccionado = async (productoSeleccionado) => {
         const p = await getProductoStockByIdProducto(productoSeleccionado);
-        console.log("response servicio stock -->",p)
+        console.log("response servicio stock -->", p)
         setStockProductoSeleccionado(p);
     }
 
@@ -51,12 +51,12 @@ export const Productos = () => {
             setProductoSeleccionado(value.id);
             setNombreProductoSeleccionado(value.nombre);
             setDatosProductoSeleccionado({
-    
-                "Nombre":value.nombre,
+
+                "Nombre": value.nombre,
                 "SKU": value.sku,
                 "Unidad": value.unidad
             }
-                )
+            )
         } else {
             setProductoSeleccionado(0);
             setNombreProductoSeleccionado(null);
@@ -77,6 +77,7 @@ export const Productos = () => {
             <Table sx={{ marginTop: '2%' }}>
                 <TableCell sx={{ width: '30%' }}>
                     <Button variant="contained" color="success" sx={{ align: "center" }} endIcon={<AddBusinessIcon />} onClick={handleClickAgregarProducto} >Agregar Producto</Button>
+                    <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon />} onClick={handleClickAgregarStock} > Agregar Stock</Button>
 
                 </TableCell>
                 <TableCell sx={{ width: '70%' }}>
@@ -109,14 +110,13 @@ export const Productos = () => {
             </Table>
 
             <ListaVariable data={datosProductoSeleccionado}></ListaVariable>
-            <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon/>} onClick={handleClickAgregarStock} > Agregar Stock</Button>
             <TablaStockProductos data={stockProductoSeleccionado} nombre={nombreProductoSeleccionado} estilo={CabeceraTablaStyle}></TablaStockProductos>
-            
+
             <Outlet context={[productoSeleccionado]}></Outlet>
-            
+
 
         </Container>
-        
-        )
+
+    )
 
 }

@@ -109,3 +109,45 @@ export const ModalDetalleVentaStyle = {
     maxHeight: '90%', // Ajusta la altura máxima del modal según tus necesidades
     overflow: 'hidden', // Para evitar el desbordamiento
 }
+
+
+export const ContainerModalAgregarVentaStyle = {
+    position: 'absolute',
+    top: '10%',
+    left: '15%',
+    width: '70%',
+    height: '80%',
+    maxWidth: '80%',
+    maxHeight: '80%',
+    overflowY: 'auto',
+    backgroundColor: 'white',
+    boxShadow: '24px',
+    padding: '16px',
+    overflow: 'hidden', // Para evitar el desbordamiento
+
+};
+
+
+export const TablaVentaScrollStyle = {
+    table: {
+        minWidth: 600,
+        '& .MuiTableCell-root': {
+            padding: '8px 16px', // Ajusta el padding vertical
+            height: '10px', // Ajusta la altura de las celdas
+        },
+        '& .MuiTableRow-root': {
+            height: '20px', // Ajusta la altura de las filas
+        },
+    },
+    tableContainer: {
+        maxHeight: '300px',
+        overflowY: 'auto',
+    },
+    tableHeader: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+        backgroundColor: '#C8C8C8',
+        color: 'blue',
+    },
+};
