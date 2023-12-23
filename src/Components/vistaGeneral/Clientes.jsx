@@ -55,7 +55,6 @@ export const Clientes = () => {
     }, []);
 
     useEffect(() => {
-        debugger
         if(clienteSeleccionado!= null && clienteSeleccionado !=0){
             setAgregarVentaDisabled(false)
         }

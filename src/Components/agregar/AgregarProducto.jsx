@@ -106,7 +106,6 @@ export const AgregarProducto = () => {
     }
 
     const handleClickOK = () => {
-        debugger
         if (codigoRespuestaAgregar=== "200") {
             setOpenModalInformacion(false);
             navigate("/app-inventario/productos");

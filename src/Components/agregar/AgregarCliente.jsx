@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { Button, Container, List, ListItem, TextField, Modal, Box, Table, TableCell, TableHead, Typography, Alert, TableBody, TableRow } from "@mui/material";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ContainerModalAgregarStyle, ContainerModalConfirmacionStyle } from '../../Utils/Temas'
 import { ModalConfirmacion } from "../Modals/ModalConfirmacion";
 import { addCliente } from "../../services/Clientes";

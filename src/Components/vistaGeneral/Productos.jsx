@@ -12,6 +12,7 @@ import { getProductoStockByIdProducto, getProductos } from "../../services/Produ
 
 export const Productos = () => {
 
+
     const [productoSeleccionado, setProductoSeleccionado] = useState(0);
     const [nombreProductoSeleccionado, setNombreProductoSeleccionado] = useState(null);
     const [agregarStockDisabled, setAgregarStockDisabled] = useState(true);
@@ -50,6 +51,7 @@ export const Productos = () => {
             setProductoSeleccionado(value.id);
             setNombreProductoSeleccionado(value.nombre);
             setDatosProductoSeleccionado({
+    
                 "Nombre":value.nombre,
                 "SKU": value.sku,
                 "Unidad": value.unidad
@@ -110,9 +112,11 @@ export const Productos = () => {
             <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon/>} onClick={handleClickAgregarStock} > Agregar Stock</Button>
             <TablaStockProductos data={stockProductoSeleccionado} nombre={nombreProductoSeleccionado} estilo={CabeceraTablaStyle}></TablaStockProductos>
             
-            <Outlet context={[datosProductoSeleccionado]}></Outlet>
+            <Outlet context={[productoSeleccionado]}></Outlet>
             
 
-        </Container>)
+        </Container>
+        
+        )
 
 }
