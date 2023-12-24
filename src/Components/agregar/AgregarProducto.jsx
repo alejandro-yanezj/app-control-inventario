@@ -116,7 +116,9 @@ export const AgregarProducto = () => {
 
 
     return (
-        <Modal open={openModal} onClose={() => console.log("cerrando modal")}>
+        <Modal open={openModal} onClose={() => console.log("cerrando modal")}
+        BackdropProps={{ onClick: (event) => event.stopPropagation() }}
+        >
             <Container sx={ContainerModalAgregarStyle}>
                 <Typography sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}>Agregar Producto</Typography>
                 <List sx={{ width: '100%' }}>
