@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Button,
     Modal,
     TextField,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
     Table,
     TableContainer,
     TableHead,
@@ -19,155 +15,407 @@ import {
     Autocomplete,
     Typography,
     Box,
+    IconButton,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { CabeceraTablaStyle, ContainerModalAgregarVentaStyle, TablaScrollStyle, TablaVentaScrollStyle } from '../../Utils/Temas';
 import { makeStyles } from '@mui/styles';
-import { getVentas } from '../../services/Ventas';
+import { addVenta, getVentas } from '../../services/Ventas';
+import { getProductos } from '../../services/Productos';
+import { ModalInformacion } from '../Modals/ModalInformacion';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import ContentCopyTwoToneIcon from '@mui/icons-material/ContentCopyTwoTone';
+import { getClientes } from '../../services/Clientes';
+import { ModalConfirmacion } from '../Modals/ModalConfirmacion';
+
 
 export const AgregarVenta = () => {
     const [openModal, setOpenModal] = useState(true);
-    const [sku, setSku] = useState('');
-    const [quantity, setQuantity] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [productList, setProductList] = useState([]);
+    const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+    const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
+    const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+    const [clienteAgregado, setClienteAgregado] = useState(null);
+    const [codigoRespuestaAgregarVenta, setCodigoRespuestaAgregarVenta] = useState(null);
+
+    const [cantidad, setCantidad] = useState(0);
+    const [precio, setPrecio] = useState(0);
+    const [listaProductos, setListaProductos] = useState([]);
+    const [listaClientes, setListaClientes] = useState([]);
+    const [listaProductosAgregados, setListaProductosAgregados] = useState([])
     const [showSales, setShowSales] = useState(false);
     const [ventas, setVentas] = useState([]);
+    const [showTablaProductos, setShowTablaProductos] = useState(false);
+    const [openModalInformacion, setOpenModalInformacion] = useState(false);
+    const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
-    const encabezados = ["SKU", "Cant.", "P. venta", "Eliminar"]
+
+    const [mensajeModalInformacion, setMensajeModalInformacion] = useState(null);
+
+    const encabezados = ["Nombre", "SKU", "Unidad", "Cant.", "Precio unitario", "Eliminar"]
 
     const useStyles = makeStyles(TablaVentaScrollStyle);
     const classes = useStyles();
+
+    const navigate = useNavigate();
+
+    const [from] = useOutletContext();
+
+
 
     const handleOnClose = () => {
         setOpenModal(false);
     };
 
     const getVentasService = async () => {
-        const vc = await getVentas();
-        setVentas(vc);
+        const ventas = await getVentas();
+        setVentas(ventas);
+    }
+
+    const getProductosService = async () => {
+        const productos = await getProductos();
+        setListaProductos(productos);
+    }
+
+    const getClientesService = async () => {
+        const clientes = await getClientes();
+        setListaClientes(clientes);
+    }
+
+    const addVentaService = async () => {
+        debugger
+        const venta = await addVenta(clienteAgregado.id,listaProductosAgregados);
+        setCodigoRespuestaAgregarVenta(venta.codigo)
+        setMensajeModalInformacion(venta.mensaje);
     }
 
     useEffect(() => {
-        getVentasService()
+        getVentasService();
+        getProductosService();
+        getClientesService();
     }, []);
 
+    useEffect(() => {
+        if (listaProductosAgregados != null && listaProductosAgregados.length > 0) {
+            setShowTablaProductos(true);
+        }
+        else {
+            setShowTablaProductos(false)
+        }
+    }, [listaProductosAgregados]);
+
     const handleAddProduct = () => {
-        if (sku !== '' && quantity > 0 && price > 0) {
+        debugger
+        if (productoSeleccionado !== null) {
+
             const productData = {
-                sku,
-                quantity,
-                price,
+                ...productoSeleccionado,
+                cantidad,
+                precio,
             };
-            setProductList([...productList, productData]);
-            setSku('');
-            setQuantity(0);
-            setPrice(0);
+            if (!verificarListaProductosAgregados(productData)) {
+                setListaProductosAgregados([...listaProductosAgregados, productData]);
+            } else {
+                setMensajeModalInformacion("El producto que desea agregar ya se encuentra en la lista de productos agregados");
+                setOpenModalInformacion(true);
+            }
+            setProductoSeleccionado(null);
+            setCantidad(0);
+            setPrecio(0);
         }
     };
 
+    const verificarListaProductosAgregados = (productoNuevo) => {
+        const existe = listaProductosAgregados.find(item => item.id === productoNuevo.id);
+        if (existe != null) {
+            return true;
+        }
+        return false;
+    }
+
+    const handleOnChangeProducto = (value) => {
+        setProductoSeleccionado(value);
+    }
+
+    const handleOnChangeVenta = (value) => {
+        setVentaSeleccionada(value);
+    }
+
+    const handleOnChangeCliente = (value) => {
+        setClienteSeleccionado(value);
+    }
     const handleDeleteProduct = (index) => {
-        const updatedList = productList.filter((_, idx) => idx !== index);
-        setProductList(updatedList);
+        const updatedList = listaProductosAgregados.filter((_, idx) => idx !== index);
+        setListaProductosAgregados(updatedList);
     };
 
     const handleClickCopy = () => {
         console.log("boton copy")
     }
 
+    const handleDeleteCliente = () => {
+        setClienteAgregado(null)
+    }
+
+    const handleClickOK = () => {
+        if (codigoRespuestaAgregarVenta=== "200") {
+            setOpenModalInformacion(false);
+            navigate("/app-inventario/ventas");
+        } else {
+            setOpenModalInformacion(false);
+        }
+    }
+
+    const handleAddCliente = () => {
+
+        if (clienteSeleccionado != null && clienteAgregado == null) {
+            setClienteAgregado(clienteSeleccionado);
+        }
+        else if (clienteSeleccionado === clienteAgregado) {
+            setMensajeModalInformacion("El cliente ya ha sido agregado");
+            setOpenModalInformacion(true);
+        }
+        else {
+            setMensajeModalInformacion("La venta solo puede tener un cliente a la vez");
+            setOpenModalInformacion(true);
+        }
+        setClienteSeleccionado(null);
+    }
+
+    const handleUpdateQuantity = (value, index) => {
+        const updatedList = [...listaProductosAgregados];
+        updatedList[index].cantidad = value;
+        setListaProductosAgregados(updatedList);
+    };
+
+    const handleUpdatePrice = (value, index) => {
+        const updatedList = [...listaProductosAgregados];
+        updatedList[index].precio = value;
+        setListaProductosAgregados(updatedList);
+    };
+
+    const handleOnClickVolver = () => {
+        navigate(`/app-inventario/${from}`)
+    }
+
+    const handleClickGenerarVenta = () => {
+        if (validarCliente() && validarProductos()) {
+            setOpenModalConfirmacion(true);
+        } else {
+            setOpenModalInformacion(true);
+        }
+    }
+
+    const validarCliente = () => {
+        debugger
+        if (clienteAgregado == null) {
+            setMensajeModalInformacion("No se puede agregar una venta sin cliente")
+            return false;
+        }
+        return true;
+    }
+
+    const validarProductos = () => {
+        debugger
+        if (listaProductosAgregados == null || listaProductosAgregados.length===0) {
+            setMensajeModalInformacion("No se puede agregar una venta sin productos")
+            return false;
+        } else {
+            const productosInvalidos = listaProductosAgregados.filter(producto => producto.precio <= 0 || producto.cantidad <= 0);
+            if (productosInvalidos!=null && productosInvalidos.length>0) {
+                setMensajeModalInformacion("No se pueden agregar productos sin cantidad o precio")
+                return false;
+            }
+            return true;
+
+        }
+
+    }
+
+
+
+    const handleClickConfirmarInfo = async () => {
+        debugger
+        const response = await addVentaService();
+        setOpenModalInformacion(true);
+        setOpenModalConfirmacion(false);
+    }
+
+    const handleClickCancelarInfo = () => {
+        setOpenModalConfirmacion(false);
+    }
+
     return (
-        <Modal open={openModal} onClose={handleOnClose}>
+        <Modal open={openModal} onClose={handleOnClose} BackdropProps={{ onClick: (event) => event.stopPropagation() }}>
             <Container style={ContainerModalAgregarVentaStyle}>
                 <Container style={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ marginBottom: '2%', textAlign: 'center', fontWeight: 'bold', fontSize: '120%' }}>Agregar Ventas</Typography>
-                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <Typography variant="body1" sx={{ marginBottom: '3%' }}>
-                            ¿Copiar desde otra venta?
-                        </Typography>
-                        <div style={{ display: 'flex', alignItems: 'center', width: '100%', maxWidth: '60%', flexBasis: '60%' }}>
-                            <Switch checked={showSales} onChange={() => setShowSales(!showSales)} sx={{ mb: '5%', ml: '2%', mr: '2%' }} />
-                            {showSales && (
-                                <>
+                    <Typography sx={{ mt: '2%', textAlign: 'center', fontWeight: 'bold', fontSize: '120%' }}>Agregar Venta</Typography>
+                    <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <IconButton color="error" onClick={handleOnClickVolver} sx={{ fontSize: '100%', alignSelf: 'flex-start' }}>
+                            <ArrowBackIosIcon />
+                            Volver
+                        </IconButton>
 
-                                    <Autocomplete
-                                        sx={{ width: '100%' }}
-                                        options={ventas}
-                                        getOptionLabel={(option) => option.fecha+ " | "+option.nombreCliente+ " | "+ option.numero+" | " + option.monto}
-                                        renderOption={(props, option) => (
-                                            <Box component="li"{...props}>
-                                                {option.fecha} | {option.nombreCliente} | numero:{option.numero} | monto:{option.monto}
-                                            </Box>
-                                        )}
-                                        renderInput={(params) => (
-                                            <TextField {...params} label="Seleccionar venta a copiar" size="small" />
-                                        )}
-                                    />
-                                    <Button color="success" onClick={handleClickCopy} style={{ marginLeft: '5px' }}>
-                                        <ContentCopyRoundedIcon />
-                                    </Button>
-                                </>
-                            )}
-                        </div>
-                    </div>
+                        <IconButton
+                            color="success" onClick={handleClickGenerarVenta} sx={{ fontSize: '100%', alignSelf: 'flex-end' }}>
+                            <ShoppingCartRoundedIcon />
+                            Generar venta
+                        </IconButton>
+                    </Box>
+                </Container>
+                <Container style={{ display: 'flex', alignItems: 'center' }}>
+
+                    <Autocomplete
+                        sx={{ width: '60%', marginRight: '1%' }}
+                        value={ventaSeleccionada}
+                        options={ventas}
+                        getOptionLabel={(option) => option.fecha + " | " + option.nombreCliente + " | " + option.numero + " | " + option.monto}
+                        renderOption={(props, option) => (
+                            <Box component="li"{...props}>
+                                {option.fecha} | {option.nombreCliente} | numero:{option.numero} | monto:{option.monto}
+                            </Box>
+                        )}
+                        renderInput={(params) => (
+                            <TextField {...params} label="¿Importar detalle desde otra venta?" size="small" />
+                        )}
+                        onChange={(e, newValue) => handleOnChangeVenta(newValue)}
+                    />
+                    <Button color="info" onClick={handleClickCopy} disabled={!ventaSeleccionada}>
+                        <ContentCopyTwoToneIcon />
+                        Copiar detalle
+                    </Button>
+                </Container>
+
+                <Container style={{ display: 'flex', alignItems: 'center' }}>
+                    <Autocomplete
+                        value={clienteSeleccionado}
+                        sx={{ width: '60%', marginRight: '1%' }}
+                        options={listaClientes}
+                        getOptionLabel={(option) => option.rut + "-" + option.dv + " | " + option.nombre}
+                        renderOption={(props, option) => (
+                            <Box component="li"{...props}>
+                                {option.rut}-{option.dv} | {option.nombre}
+                            </Box>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Seleccionar cliente para la nueva venta"
+                                size="small"
+                            />
+                        )}
+                        onChange={(e, newValue) => handleOnChangeCliente(newValue)}
+                    />
+
+                    <Button onClick={handleAddCliente} disabled={!clienteSeleccionado}>
+                        <AddBoxRoundedIcon />
+                        Agregar Cliente
+                    </Button>
                 </Container>
 
                 <Container style={{ display: 'flex', alignItems: 'center', marginBottom: '2%' }}>
                     <Autocomplete
-                        sx={{ width: '50%', marginRight: '1%' }}
-                        options={['SKU001', 'SKU002']}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Agregar Producto" size="small" />
+                        value={productoSeleccionado}
+                        sx={{ width: '60%', marginRight: '1%' }}
+                        options={listaProductos}
+                        getOptionLabel={(option) => option.sku + " | " + option.nombre + " | " + option.unidad}
+                        renderOption={(props, option) => (
+                            <Box component="li"{...props}>
+                                {option.sku} | {option.nombre} | {option.unidad}
+                            </Box>
                         )}
-                        value={sku}
-                        onChange={(e) => setSku(e.target.value)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Seleccionar producto a agregar"
+                                size="small"
+                            />
+                        )}
+                        onChange={(e, newValue) => handleOnChangeProducto(newValue)}
                     />
-                    <TextField
-                        type="number"
-                        label="Cant."
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        size="small"
-                        sx={{ width: '10%', marginRight: '1%' }}
-                        disabled={!sku}
-                    />
-                    <TextField
-                        type="number"
-                        label="Precio"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        size="small"
-                        sx={{ width: '20%' }}
-                        disabled={!sku}
-                    />
-                    <Button onClick={handleAddProduct} disabled={!sku}>
+
+                    <Button onClick={handleAddProduct} disabled={!productoSeleccionado}>
                         <AddBoxRoundedIcon />
+                        Agregar Producto
                     </Button>
                 </Container>
-                <TableContainer component={Paper} className={classes.tableContainer}>
+                {clienteAgregado && (
+                    <Container style={{ display: 'flex', alignItems: 'center', marginBottom: '2%' }}>
+                        <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '100%', mr: '3%' }}>
+                            Venta para el cliente {clienteAgregado.nombre}
+                        </Typography>
+                        <Button color="error" onClick={handleDeleteCliente}>
+                            <DeleteForeverIcon />
+                            Eliminar cliente
+                        </Button>
+
+                    </Container>
+                )}
+                {showTablaProductos && (<TableContainer component={Paper} className={classes.tableContainer}>
                     <Table className={classes.table}>
                         <TableHead className={classes.tableHeader}>
                             <TableRow>
-                                {encabezados.map(e => {
-                                    return (<TableCell align="center" key={e} x> {e} </TableCell>)
-                                })}
+                                {encabezados.map((e, index) => (
+                                    <TableCell key={index} align="center">
+                                        {e}
+                                    </TableCell>
+                                ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {productList.map((product, index) => (
+                            {listaProductosAgregados.map((product, index) => (
                                 <TableRow key={index}>
-                                    <TableCell>{product.sku}</TableCell>
-                                    <TableCell>{product.quantity}</TableCell>
-                                    <TableCell>{product.price}</TableCell>
-                                    <TableCell>
-                                        <Button color="error" onClick={() => handleDeleteProduct(index)}> <DeleteForeverIcon /></Button>
+                                    <TableCell align="center" sx={{ width: '40%' }}>
+                                        {product.nombre}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ width: '10%' }}>
+                                        {product.sku}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ width: '10%' }}>
+                                        {product.unidad}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ width: '15%' }}>
+                                        <TextField
+                                            type="number"
+                                            value={product.cantidad}
+                                            onChange={(e) => handleUpdateQuantity(e.target.value, index)}
+                                            size="small"
+                                        />
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ width: '20%' }}>
+                                        <TextField
+                                            type="number"
+                                            value={product.precio}
+                                            onChange={(e) => handleUpdatePrice(e.target.value, index)}
+                                            size="small"
+                                        />
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ width: '5%' }}>
+                                        <Button color="error" onClick={() => handleDeleteProduct(index)}>
+                                            <DeleteForeverIcon />
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
-                </TableContainer>
+                </TableContainer>)}
+
+                <ModalConfirmacion
+                    openModalConfirmacion={openModalConfirmacion}
+                    mensaje={"¿Confirma que desea generar una nueva venta con los datos ingresados?"}
+                    handleClickCancelarInfo={handleClickCancelarInfo}
+                    handleClickConfirmarInfo={handleClickConfirmarInfo}
+                />
+
+                <ModalInformacion
+                    openModalInformacion={openModalInformacion}
+                    mensaje={mensajeModalInformacion}
+                    handleClickOK={handleClickOK}
+                />
             </Container>
         </Modal>
 

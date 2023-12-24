@@ -197,7 +197,9 @@ export const AgregarCliente = () => {
 
     return (
         <>
-            <Modal open={openModal} onClose={handleCloseModal}>
+            <Modal open={openModal} onClose={handleCloseModal}
+            BackdropProps={{ onClick: (event) => event.stopPropagation() }}
+            >
                 <Container sx={ContainerModalAgregarStyle}>
                     <Typography sx={{ fontSize: '200%', marginBottom: '20px' }}>Agregar Cliente</Typography>
                     <Box sx={{ width: '80%' }}>

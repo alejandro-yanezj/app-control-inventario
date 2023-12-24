@@ -17,7 +17,7 @@ export const getProductos = async () => {
 export const getProductoStockByIdProducto = async (idProducto) => {
     try {
         const response = await axios.get(`${basePath}/stock/obtener/${idProducto}`)
-        return response.data.sort((v1, v2) => (v1.fecha > v2.fecha) ? -1 : (v1.fecha < v2.fecha) ? 1 : 0);
+        return response.data.sort((v1, v2) => (v1.fecha < v2.fecha) ? -1 : (v1.fecha > v2.fecha) ? 1 : 0);
     } catch (error) {
         console.log(error)
         return []

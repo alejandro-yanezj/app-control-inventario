@@ -121,7 +121,8 @@ export const AgregarStock = () => {
         <>
             {idProductoSeleccionado!=null && <Modal
                 open={openModal}
-                onClose={console.log("cerrando modal stock productos")}>
+                onClose={console.log("cerrando modal stock productos")}
+                BackdropProps={{ onClick: (event) => event.stopPropagation() }}>
                  <Container sx={ContainerModalAgregarStyle} >
                     <Box sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}> Agregar Stock </Box>
                     <List>
