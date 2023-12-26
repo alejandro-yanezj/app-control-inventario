@@ -1,5 +1,5 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { CabeceraTablaStyle, TablaScrollStyle } from '../../Utils/Temas'
+import { CabeceraTablaStyle, TablaScrollStyle, TablaVentasResumenScrollStyle } from '../../Utils/Temas'
 import { makeStyles } from '@mui/styles';
 
 
@@ -7,7 +7,7 @@ export const TablaStockProductos = ({ data = [], nombre }) => {
 
     const encabezados = ["Fecha Compra", "Precio Compra", "Stock disponible"]
 
-    const useStyles = makeStyles(TablaScrollStyle);
+    const useStyles = makeStyles(TablaVentasResumenScrollStyle);
     const classes = useStyles();
 
     {
@@ -41,7 +41,7 @@ export const TablaStockProductos = ({ data = [], nombre }) => {
             )
         } else if ((data == null || data.length == 0) && nombre != null) {
             return (
-                <Box sx={{ textAlign: "center", fontSize: 30, margin: 5 }}> No existe stock para el producto {nombre}</Box>
+                <Box sx={{ textAlign: "center", fontSize: '150%', margin: '10%'}}> No existe stock para el producto</Box>
             )
         }
     }

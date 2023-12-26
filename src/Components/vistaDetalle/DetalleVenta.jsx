@@ -1,7 +1,7 @@
 import { Box, Container, Grid, IconButton, List, ListItem, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { getDetalleVenta } from "../../Utils/DataUtils"
 import { ListaVariable } from "../Listas/ListaVariable";
-import { CabeceraTablaStyle, ModalDetalleVenta, ModalDetalleVentaStyle } from "../../Utils/Temas";
+import { CabeceraTablaStyle, ContainerModalAgregarVentaStyle, ModalDetalleVenta, ModalDetalleVentaStyle } from "../../Utils/Temas";
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
@@ -43,13 +43,12 @@ export const DetalleVenta = () => {
     }
     const idVenta = routeParams.idVenta
 
-    debugger
     const getVentaService = async () => {
         const venta = await getVentaById(idVenta);
         if (venta != null) {
             setdetalleVenta(venta);
         }
-        else{
+        else {
             navigate(`/app-inventario/${from}`)
         }
     }
@@ -69,24 +68,12 @@ export const DetalleVenta = () => {
 
             <Modal open={openModal} onClose={handleCloseModal}>
                 <Box
-                    sx={ModalDetalleVentaStyle}
+                    sx={ContainerModalAgregarVentaStyle}
                 >
 
                     <Typography variant="h5" gutterBottom align="center">
                         Detalles de la Venta
                     </Typography>
-
-                    <Box mb={2} sx={{ textAlign: 'left' }}>
-                        <Typography variant="body1">
-                            Número: {detalleVenta.numeroVenta}
-                        </Typography>
-                        <Typography variant="body1">
-                            Cliente: {detalleVenta.nombreCliente}
-                        </Typography>
-                        <Typography variant="body1">
-                            Fecha: {detalleVenta.fecha}
-                        </Typography>
-                    </Box>
 
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2%' }}>
                         <IconButton color="error" onClick={handleButtonVolver}>
@@ -94,10 +81,17 @@ export const DetalleVenta = () => {
                             Volver
                         </IconButton>
 
-                        <IconButton color="success">
-                            Generar venta a partir de actual <ShoppingCartCheckoutOutlinedIcon />
-                        </IconButton>
                     </Box>
+
+                    <ListaVariable data={
+                        {
+                            "Numero": detalleVenta.numeroVenta,
+                            "Nombre Cliente": detalleVenta.nombreCliente,
+                            "Fecha": detalleVenta.fecha
+
+                        }}>
+                    </ListaVariable>
+
 
                     <TableContainer component={Paper} className={classes.tableContainer}>
                         <Table className={classes.table}>

@@ -33,7 +33,6 @@ export const getVentaById = async (idVenta) => {
 
 export const getVentaResumenById = async (idVenta) => {
     try {
-        debugger
         const response = await axios.get(`${basePath}/obtener/resumen/${idVenta}`)
         return response.data;
     } catch (err) {
@@ -50,14 +49,13 @@ export const getVentaResumenById = async (idVenta) => {
 }
 
 export const addVenta = async (idCliente = "", productos = []) => {
-    debugger
     try {
         const request = {
             "idCliente": idCliente,
             "productos": productos.map(producto => ({
                 "idProducto": producto.id,
                 "nombre":producto.nombre,
-                "cantidad": parseInt(producto.cantidad), // Asegúrate de convertir la cantidad a un número si es un string
+                "cantidad": parseFloat(producto.cantidad), 
                 "precioVenta": parseInt(producto.precio)
             }))
         };

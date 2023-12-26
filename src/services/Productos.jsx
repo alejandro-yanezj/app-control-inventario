@@ -48,7 +48,6 @@ export const addProducto = async (nombre = "", sku = "", unidad = "") => {
 
 export const addStockProducto = async (idProducto = 0, fechaCompra = "", precioCompra = "0.0", stock = 0) => {
     try {
-        debugger
         const productoStock = {
             "idProducto": idProducto,
             "fechaCompra": fechaCompra,

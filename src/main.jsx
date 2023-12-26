@@ -3,13 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Home } from './Components/Home'
 import { AgregarProducto } from "./Components/Agregar/AgregarProducto";
 import { AgregarCliente } from "./Components/Agregar/AgregarCliente";
-import { Productos } from "./Components/VistaGeneral/Productos";
 import { Clientes } from "./Components/VistaGeneral/Clientes";
 import { AgregarStock } from "./Components/Agregar/AgregarStockProducto"
 import { Ventas } from "./Components/VistaGeneral/Ventas";
 import { ErrorRedirectHome } from './Components/VistasError/ErrorRedirectHome'
 import { DetalleVenta } from "./Components/VistaDetalle/DetalleVenta";
 import { AgregarVenta } from "./Components/agregar/AgregarVenta";
+import { Productos } from "./Components/vistaGeneral/Productos";
 
 export default function App() {
   return (

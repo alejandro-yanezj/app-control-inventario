@@ -19,8 +19,7 @@ import {
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import { CabeceraTablaStyle, ContainerModalAgregarVentaStyle, TablaScrollStyle, TablaVentaScrollStyle } from '../../Utils/Temas';
+import {  ContainerModalAgregarVentaStyle,  TablaVentaScrollStyle } from '../../Utils/Temas';
 import { makeStyles } from '@mui/styles';
 import { addVenta, getVentaResumenById, getVentas } from '../../services/Ventas';
 import { getProductos } from '../../services/Productos';
@@ -87,22 +86,20 @@ export const AgregarVenta = () => {
     }
 
     const addVentaService = async () => {
-        debugger
         const venta = await addVenta(clienteAgregado.id, listaProductosAgregados);
         setCodigoRespuestaAgregarVenta(venta.codigo)
         setMensajeModalInformacion(venta.mensaje);
     }
 
     const getVentaCopiarService = async () => {
-        debugger
         const venta = await getVentaResumenById(ventaSeleccionada.idVenta);
-        if(venta.idVenta!=null){
+        if (venta.idVenta != null) {
             setClienteAgregado(venta.cliente);
             setListaProductosAgregados(venta.productos);
             setVentaSeleccionada(null);
             setMensajeModalInformacionCopiar("Cliente y productos copiados correctamente")
         }
-        else{
+        else {
             setMensajeModalInformacionCopiar(venta.mensaje);
         }
     }
@@ -123,7 +120,6 @@ export const AgregarVenta = () => {
     }, [listaProductosAgregados]);
 
     const handleAddProduct = () => {
-        debugger
         if (productoSeleccionado !== null) {
 
             const productData = {
@@ -225,7 +221,6 @@ export const AgregarVenta = () => {
     }
 
     const validarCliente = () => {
-        debugger
         if (clienteAgregado == null) {
             setMensajeModalInformacion("No se puede agregar una venta sin cliente")
             return false;
@@ -234,7 +229,6 @@ export const AgregarVenta = () => {
     }
 
     const validarProductos = () => {
-        debugger
         if (listaProductosAgregados == null || listaProductosAgregados.length === 0) {
             setMensajeModalInformacion("No se puede agregar una venta sin productos")
             return false;
@@ -271,7 +265,6 @@ export const AgregarVenta = () => {
     }
 
     const handleClickConfirmarCopiar = async () => {
-        debugger
         const response = await getVentaCopiarService();
         setOpenModalInformacionCopiar(true);
         setOpenModalConfirmacionCopiar(false);
@@ -283,17 +276,11 @@ export const AgregarVenta = () => {
         <Modal open={openModal} onClose={handleOnClose} BackdropProps={{ onClick: (event) => event.stopPropagation() }}>
             <Container style={ContainerModalAgregarVentaStyle}>
                 <Container style={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ mt: '2%', textAlign: 'center', fontWeight: 'bold', fontSize: '120%' }}>Agregar Venta</Typography>
+                    <Typography sx={{ mt: '2%', textAlign: 'center', fontWeight: 'bold', fontSize: '140%' }}>Agregar Venta</Typography>
                     <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <IconButton color="error" onClick={handleOnClickVolver} sx={{ fontSize: '100%', alignSelf: 'flex-start' }}>
+                        <IconButton color="error" onClick={handleOnClickVolver}>
                             <ArrowBackIosIcon />
                             Volver
-                        </IconButton>
-
-                        <IconButton
-                            color="success" onClick={handleClickGenerarVenta} sx={{ fontSize: '100%', alignSelf: 'flex-end' }}>
-                            <ShoppingCartRoundedIcon />
-                            Generar venta
                         </IconButton>
                     </Box>
                 </Container>
@@ -373,18 +360,52 @@ export const AgregarVenta = () => {
                         Agregar Producto
                     </Button>
                 </Container>
-                {clienteAgregado && (
-                    <Container style={{ display: 'flex', alignItems: 'center', marginBottom: '2%' }}>
-                        <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '100%', mr: '3%' }}>
-                            Venta para el cliente {clienteAgregado.nombre}
-                        </Typography>
-                        <Button color="error" onClick={handleDeleteCliente}>
-                            <DeleteForeverIcon />
-                            Eliminar cliente
-                        </Button>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "2%",
+                    }}
+                >
+                    {clienteAgregado && (
+                        <Container
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    textAlign: "center",
+                                    fontWeight: "bold",
+                                    fontSize: "100%",
+                                    marginRight: "3%",
+                                }}
+                            >
+                                Venta para el cliente {clienteAgregado.nombre}
+                            </Typography>
+                            <Button color="error" onClick={handleDeleteCliente}>
+                                <DeleteForeverIcon />
+                                Eliminar cliente
+                            </Button>
+                        </Container>
+                    )}
 
-                    </Container>
-                )}
+                    <Box sx={{ flex: 1 }} />
+
+                    <IconButton
+                        color="success"
+                        onClick={handleClickGenerarVenta}
+                        sx={{ marginRight: '3%' }} // Aquí añadí el margen derecho
+                    >
+                        Generar nueva venta
+                        <ShoppingCartRoundedIcon />
+                    </IconButton>
+                </Box>
+
+
+
                 {showTablaProductos && (<TableContainer component={Paper} className={classes.tableContainer}>
                     <Table className={classes.table}>
                         <TableHead className={classes.tableHeader}>

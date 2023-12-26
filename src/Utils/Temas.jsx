@@ -31,6 +31,7 @@ export const IconoNavBarSize = {
     fontSize: '200%'
 }
 
+
 export const ContainerModalAgregarStyle = {
     position: 'absolute',
     top: '50%',
@@ -39,14 +40,43 @@ export const ContainerModalAgregarStyle = {
     bgcolor: 'white',
     boxShadow: 24,
     p: 4,
-    maxWidth: '90%',
-    maxHeight: '90vh',
-    overflow: 'auto',
+    width: '90%', // Tamaño inicial en porcentaje
+    maxWidth: '450px', // Ancho máximo del modal
+    height: '90%', // Tamaño inicial en porcentaje
+    maxHeight: '90vh', // Tamaño máximo relativo al viewport height (vh)
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-};
+    '@media (min-width: 1200px)': {
+      maxWidth: '500px',
+    },
+    '@media (min-height: 720px)': {
+        maxHeight: '700px',
+      }
+}
 
+export const ContainerModalAgregarProductoStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'white',
+    boxShadow: 24,
+    p: 4,
+    width: '90%', // Tamaño inicial en porcentaje
+    maxWidth: '450px', // Ancho máximo del modal
+    height: '90%', // Tamaño inicial en porcentaje
+    maxHeight: '90vh', // Tamaño máximo relativo al viewport height (vh)
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '@media (min-width: 1200px)': {
+      maxWidth: '500px',
+    },
+    '@media (min-height: 720px)': {
+        maxHeight: '600px',
+      }
+}
 export const ModalDetalleVenta = {
 
     position: 'absolute',
@@ -93,7 +123,6 @@ export const TablaScrollStyle = {
         top: 0,
         zIndex: 1,
         backgroundColor: '#C8C8C8',
-        color: 'blue'
     },
 }
 
@@ -120,9 +149,10 @@ export const ContainerModalAgregarVentaStyle = {
     backgroundColor: 'white',
     boxShadow: '24px',
     padding: 4,
-    maxWidth: '80%', // Ajusta el ancho del modal según tus necesidades
-    minHeight:'90%',
-    maxHeight: '90%', // Ajusta la altura máxima del modal según tus necesidades
+    width: '80%',
+    maxWidth:'1000px', // Ajusta el ancho del modal según tus necesidades
+    height:'80%',
+    maxHeight: '600px', // Ajusta la altura máxima del modal según tus necesidades
     overflow: 'hidden', // Para evitar el desbordamiento
 
 };
@@ -133,7 +163,7 @@ export const TablaVentaScrollStyle = {
         maxHeight:'30px',
         '& .MuiTableCell-root': {
             padding: '0', // Ajusta el padding vertical
-            height: '10px', // Ajusta la altura de las celdas
+            height: '5px', // Ajusta la altura de las celdas
         },
         '& .MuiTableRow-root': {
             height: '5px', // Ajusta la altura de las filas
@@ -148,5 +178,33 @@ export const TablaVentaScrollStyle = {
         top: 0,
         zIndex: 1,
         backgroundColor: '#C8C8C8',
+        color:'white',
+        "& .MuiTableCell-head": {
+            color: "white",
+        },
     },
 };
+
+export const TablaVentasResumenScrollStyle = {
+    table: {
+        maxHeight: '30px',
+        '& .MuiTableCell-root': {
+            padding: '0', // Ajusta el padding vertical
+            height: '40px', // Ajusta la altura de las celdas
+        },
+        '& .MuiTableRow-root': {
+            height: '5px', // Ajusta la altura de las filas
+        },
+    },
+    tableContainer: {
+        maxHeight: '618px',
+        overflowY: 'auto',
+    },
+    tableHeader: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+        backgroundColor: '#C8C8C8',
+        color: 'blue'
+    },
+}

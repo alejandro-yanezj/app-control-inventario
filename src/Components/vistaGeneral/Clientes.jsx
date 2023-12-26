@@ -80,7 +80,6 @@ export const Clientes = () => {
     }
 
     const handleOnChange = (value) => {
-        debugger
         if (value != null) {
             setClienteSeleccionado(value.id);
             setValidarVentasTabla(true);
@@ -99,10 +98,10 @@ export const Clientes = () => {
             <Table sx={{marginTop:'2%'}}>
                 <TableCell sx={{width:'30%'}}>
                     <Button variant="contained" color="success" endIcon={<PersonAddIcon />} onClick={handleClickAgregarCliente} >Agregar Cliente</Button>
-                    <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarVentaDisabled} endIcon={<AddShoppingCartIcon />} > Agregar Venta</Button>
 
                 </TableCell>
                 <TableCell sx={{width:'80%'}}>
+
                     <Autocomplete
                         id="cliente-seleccionado"
                         sx={{marginBottom:'2%'}}

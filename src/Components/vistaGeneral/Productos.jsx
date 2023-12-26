@@ -72,6 +72,7 @@ export const Productos = () => {
         navigate("/app-inventario/productos/agregar-stock")
     }
 
+
     return (
         <Container>
             <Table sx={{ marginTop: '2%' }}>
@@ -80,10 +81,11 @@ export const Productos = () => {
                     <Button variant="outlined" color="success" sx={{ align: "right", margin: 2 }} disabled={agregarStockDisabled} endIcon={<PlaylistAddTwoToneIcon />} onClick={handleClickAgregarStock} > Agregar Stock</Button>
 
                 </TableCell>
-                <TableCell sx={{ width: '70%' }}>
+                <TableCell sx={{ width: '80%' }}>
+
                     <Autocomplete
                         id="producto-seleccionado"
-                        sx={{ marginBottom: '2%', textAlign: 'center' }}
+                        sx={{ marginBottom: '2%' }}
                         options={productos}
                         autoHighlight
                         getOptionLabel={(option) => option.sku + "  " + option.nombre + "  " + option.unidad}
@@ -103,8 +105,9 @@ export const Productos = () => {
                             />
                         )}
                         onChange={(event, newValue) => { handleOnChange(newValue) }}
-                        isOptionEqualToValue={(option, value) => { return value.id }}
+                        isOptionEqualToValue={(option, value) => { return value.idProducto }}
                     />
+                   
                 </TableCell>
 
             </Table>

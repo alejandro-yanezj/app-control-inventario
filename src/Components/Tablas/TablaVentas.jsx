@@ -1,5 +1,5 @@
 import { TableBody, TableHead, TableRow, TableCell, Table, Box, Button, IconButton, TableContainer, Paper } from "@mui/material"
-import { CabeceraTablaStyle } from '../../Utils/Temas'
+import { CabeceraTablaStyle, TablaVentasResumenScrollStyle } from '../../Utils/Temas'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
@@ -7,7 +7,7 @@ import { makeStyles } from "@mui/styles";
 
 export const TablaVentas = ({ ventas = [], validar = false }) => {
 
-    const encabezados = ["Detalle", "Número venta", "Monto" ,"Fecha compra", "Cliente"]
+    const encabezados = ["Cliente", "Fecha", "Monto", "Número venta", "Detalle"]
 
     const navigate = useNavigate();
 
@@ -15,22 +15,8 @@ export const TablaVentas = ({ ventas = [], validar = false }) => {
         navigate("detalle-venta/" + idVenta);
     }
 
-    const useStyles = makeStyles({
-        table: {
-            minWidth: 650,
-        },
-        tableContainer: {
-            maxHeight: '640px',
-            overflowY: 'auto',
-        },
-        tableHeader: {
-            position: 'sticky',
-            top: 0,
-            zIndex: 1,
-            backgroundColor: '#C8C8C8',
-            color: 'blue'
-        },
-    });
+    const useStyles = makeStyles(TablaVentasResumenScrollStyle);
+
     const classes = useStyles();
 
     {
@@ -51,16 +37,15 @@ export const TablaVentas = ({ ventas = [], validar = false }) => {
                                 {ventas.map(v => {
                                     return (
                                         <TableRow key={v.idVenta}>
+                                            <TableCell align="center"> {v.nombreCliente} </TableCell>
+                                            <TableCell align="center"> {v.fecha} </TableCell>
+                                            <TableCell align="center"> {v.monto} </TableCell>
+                                            <TableCell align="center"> {v.numero} </TableCell>
                                             <TableCell align="center">
-                                                <IconButton  color="primary" onClick={() => handleOnClick(v.idVenta)}>
+                                                <IconButton color="primary" onClick={() => handleOnClick(v.idVenta)}>
                                                     <DescriptionOutlinedIcon />
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell align="center"> {v.numero} </TableCell>
-                                            <TableCell align="center"> {v.monto} </TableCell>
-
-                                            <TableCell align="center"> {v.fecha} </TableCell>
-                                            <TableCell align="center"> {v.nombreCliente} </TableCell>
                                         </TableRow>
                                     )
                                 })}

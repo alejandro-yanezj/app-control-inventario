@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import { Button, Container, List, ListItem, TextField, Modal, Box, Table, TableCell, TableHead, Typography, Alert, TableBody, TableRow } from "@mui/material";
+import { Button, Container, List, ListItem, TextField, Modal, Box, Table, TableCell, TableHead, Typography, Alert, TableBody, TableRow, IconButton, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ContainerModalAgregarStyle, ContainerModalConfirmacionStyle } from '../../Utils/Temas'
+import { ContainerModalAgregarStyle, ContainerModalAgregarVentaStyle, ContainerModalConfirmacionStyle } from '../../Utils/Temas'
 import { ModalConfirmacion } from "../Modals/ModalConfirmacion";
 import { addCliente } from "../../services/Clientes";
 import { ModalInformacion } from "../Modals/ModalInformacion";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+
 
 export const AgregarCliente = () => {
 
@@ -197,35 +200,50 @@ export const AgregarCliente = () => {
 
     return (
         <>
-            <Modal open={openModal} onClose={handleCloseModal}
-            BackdropProps={{ onClick: (event) => event.stopPropagation() }}
-            >
+
+
+            <Modal open={openModal} onClose={handleCloseModal} BackdropProps={{ onClick: (event) => event.stopPropagation() }}>
                 <Container sx={ContainerModalAgregarStyle}>
                     <Typography sx={{ fontSize: '200%', marginBottom: '20px' }}>Agregar Cliente</Typography>
-                    <Box sx={{ width: '80%' }}>
-                        <List>
-                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <TextField sx={{ width: '80%' }} label="Nombre Cliente" onChange={handleOnChangeNombre} />
+                    <Grid container justifyContent="space-between" margin={'5%'}>
+                        <IconButton color="error" onClick={handleClickCancelar}>
+                            <ArrowBackIosIcon />
+                            Volver
+                        </IconButton>
+                        <IconButton color="success" onClick={handleClickButtonGuardar}>
+                            Guardar
+                            <PersonAddAltRoundedIcon />
+                        </IconButton>
+                    </Grid>
+                    <Box sx={{ width: '100%', overflowY: 'auto' }}>
+                        <List sx={{ padding: 0 }}>
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <TextField fullWidth label="Nombre Cliente" onChange={handleOnChangeNombre} />
                             </ListItem>
-                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <TextField sx={{ width: '80%' }} label="Rut" variant="outlined" onChange={handleOnChangeRut} />
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <TextField fullWidth label="Rut" variant="outlined" onChange={handleOnChangeRut} />
                             </ListItem>
-                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <TextField sx={{ width: '80%' }} label="Direccion" variant="outlined" onChange={handleOnChangeDireccion} />
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <TextField fullWidth label="Direccion" variant="outlined" onChange={handleOnChangeDireccion} />
                             </ListItem>
-                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <TextField sx={{ width: '80%' }} label="Telefono" variant="outlined" onChange={handleOnChangeTelefono} />
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <TextField fullWidth label="Telefono" variant="outlined" onChange={handleOnChangeTelefono} />
                             </ListItem>
-                            <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <TextField sx={{ width: '80%' }} label="Email" variant="outlined" onChange={handleOnChangeEmail} />
+                            <ListItem sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <TextField fullWidth label="Email" variant="outlined" onChange={handleOnChangeEmail} />
                             </ListItem>
                         </List>
                     </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                        <Button sx={{ margin: 2 }} variant="contained" color="error" onClick={handleClickCancelar}>Cancelar</Button>
-                        <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}>Guardar</Button>
-                    </Box>
-                    {renderAlert()}
+                    <Alert sx={{
+                        marginTop: '5%',
+                        visibility: showAlert ? 'visible' : 'hidden', // Mostrar u ocultar la alerta
+                        opacity: showAlert ? 1 : 0, // Ajustar la opacidad
+                        transition: 'visibility 0s, opacity 0.5s linear' // Agregar transición
+                    }} severity={alertSeverity}>
+                        {alertContent}
+                    </Alert>
+
+
                     <ModalConfirmacion
                         openModalConfirmacion={openModalConfirmacion}
                         mensaje={"¿Confirma que desea agregar cliente?"}

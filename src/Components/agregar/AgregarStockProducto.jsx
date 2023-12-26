@@ -1,10 +1,14 @@
-import { Container, List, ListItem, TextField, Button, Box, Modal, Typography, Alert } from '@mui/material'
+import { Container, List, ListItem, TextField, Button, Box, Modal, Typography, Alert, Grid, IconButton } from '@mui/material'
 import { useState } from 'react'
-import { ContainerModalAgregarStyle } from '../../Utils/Temas'
+import { ContainerModalAgregarProductoStyle, ContainerModalAgregarStyle } from '../../Utils/Temas'
 import { ModalConfirmacion } from '../Modals/ModalConfirmacion';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { ModalInformacion } from '../Modals/ModalInformacion';
 import { addStockProducto } from '../../services/Productos';
+
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import InventoryRoundedIcon from '@mui/icons-material/InventoryRounded';
+import { getCurrentDate } from '../../Utils/Utils';
 
 export const AgregarStock = () => {
 
@@ -19,6 +23,7 @@ export const AgregarStock = () => {
     const [precioCompra, setPrecioCompra] = useState(null);
     const [cantidadStock, setCantidadStock] = useState(null);
 
+
     //Alert
     const [showAlert, setShowAlert] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState("info");
@@ -26,12 +31,11 @@ export const AgregarStock = () => {
 
     const navigate = useNavigate();
 
-    if(idProductoSeleccionado==null || idProductoSeleccionado===0){
+    if (idProductoSeleccionado == null || idProductoSeleccionado === 0) {
         navigate("/app-inventario/productos");
     }
 
     const mostrarAlerta = (tipoAlerta, mensaje) => {
-        debugger
         if (showAlert) return
         setAlertSeverity(tipoAlerta);
         setAlertContent(mensaje);
@@ -47,7 +51,7 @@ export const AgregarStock = () => {
         navigate("/app-inventario/productos");
     }
 
-    const validarStock = () =>{
+    const validarStock = () => {
         if (validarFecha()
             && validarPrecio()
             && validarCantidad()) {
@@ -61,12 +65,11 @@ export const AgregarStock = () => {
     const handleOnChangePrecio = (e) => {
         setPrecioCompra(e.target.value);
     }
-    const handleOnChangeCantidad= (e) => {
+    const handleOnChangeCantidad = (e) => {
         setCantidadStock(e.target.value);
     }
 
     const validarFecha = () => {
-        debugger
         if (fechaCompra === null || fechaCompra.length === 0) {
             mostrarAlerta("error", "Se debe ingresar Fecha de compra");
             return false;
@@ -89,7 +92,6 @@ export const AgregarStock = () => {
     }
 
     const handleClickButtonGuardar = () => {
-        debugger
         if (validarStock() == true) {
             setOpenModalConfirmacion(true);
         }
@@ -100,7 +102,7 @@ export const AgregarStock = () => {
     }
 
     const handleClickConfirmarInfo = async () => {
-        const response = await addStockProducto(idProductoSeleccionado,fechaCompra,precioCompra,cantidadStock);
+        const response = await addStockProducto(idProductoSeleccionado, fechaCompra, precioCompra, cantidadStock);
         setCodigoRespuestaAgregar(response.codigo)
         setMensajeRespuestaAgregar(response.mensaje)
         setOpenModalInformacion(true);
@@ -108,7 +110,7 @@ export const AgregarStock = () => {
     }
 
     const handleClickOK = () => {
-        if (codigoRespuestaAgregar=== "200") {
+        if (codigoRespuestaAgregar === "200") {
             setOpenModalInformacion(false);
             navigate("/app-inventario/productos");
         } else {
@@ -116,18 +118,38 @@ export const AgregarStock = () => {
         }
     }
 
+    
+
 
     return (
         <>
-            {idProductoSeleccionado!=null && <Modal
+            {idProductoSeleccionado != null && <Modal
                 open={openModal}
                 onClose={console.log("cerrando modal stock productos")}
                 BackdropProps={{ onClick: (event) => event.stopPropagation() }}>
-                 <Container sx={ContainerModalAgregarStyle} >
-                    <Box sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}> Agregar Stock </Box>
-                    <List>
+                <Container sx={ContainerModalAgregarProductoStyle} >
+                    <Typography sx={{ textAlign: 'center', fontSize: '200%', margin: '5%' }}> Agregar Stock </Typography>
+
+                    <Grid container justifyContent="space-between" margin={'5%'}>
+                        <IconButton color="error" onClick={handleClickCancelar}>
+                            <ArrowBackIosIcon />
+                            Volver
+                        </IconButton>
+                        <IconButton color="success" onClick={handleClickButtonGuardar}>
+                            Guardar
+                            <InventoryRoundedIcon />
+                        </IconButton>
+                    </Grid>
+                    <List sx={{ width: '100%' }}>
                         <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField sx={{ width: '80%' }}label="Fecha de compra" variant="outlined" onChange={handleOnChangeFecha}  />
+                            <input
+                                type="date"
+                                value={fechaCompra}
+                                onChange={handleOnChangeFecha}
+                                style={{ width: '72%', padding: '15px', borderRadius: '4px', border: '1px solid #ccc' }}
+                                max={getCurrentDate()} // Establecer la fecha máxima como la fecha actual
+
+                            />
                         </ListItem>
                         <ListItem sx={{ display: 'flex', justifyContent: 'center' }}>
                             <TextField sx={{ width: '80%' }} label="Precio de compra" variant="outlined" onChange={handleOnChangePrecio} />
@@ -136,13 +158,15 @@ export const AgregarStock = () => {
                             <TextField sx={{ width: '80%' }} label="Cantidad" variant="outlined" onChange={handleOnChangeCantidad} />
                         </ListItem>
                     </List>
-                    
-                    <Typography align="center">
-                        <Button sx={{ margin: 2 }}
-                            variant="contained" color="error" onClick={handleClickCancelar}> Cancelar</Button>
-                        <Button sx={{ margin: 2 }} variant="contained" color="success" onClick={handleClickButtonGuardar}> Guardar</Button>
-                        {showAlert && <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>{alertContent}</Alert>}
-                    </Typography >
+
+                    <Alert sx={{
+                        marginTop: '5%',
+                        visibility: showAlert ? 'visible' : 'hidden', // Mostrar u ocultar la alerta
+                        opacity: showAlert ? 1 : 0, // Ajustar la opacidad
+                        transition: 'visibility 0s, opacity 0.5s linear' // Agregar transición
+                    }} severity={alertSeverity}>
+                        {alertContent}
+                    </Alert>
                     <ModalConfirmacion
                         openModalConfirmacion={openModalConfirmacion}
                         mensaje={"¿Confirma que desea agregar stock?"}
@@ -150,10 +174,10 @@ export const AgregarStock = () => {
                         handleClickConfirmarInfo={handleClickConfirmarInfo}
                     />
                     <ModalInformacion
-                    openModalInformacion={openModalInformacion}
-                    mensaje={mensajeRespuestaAgregar}
-                    handleClickOK={handleClickOK}
-                />
+                        openModalInformacion={openModalInformacion}
+                        mensaje={mensajeRespuestaAgregar}
+                        handleClickOK={handleClickOK}
+                    />
                 </Container>
             </Modal >}
         </>

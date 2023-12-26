@@ -25,7 +25,6 @@ export const getClienteById = async (idCliente) => {
 
 export const addCliente = async (nombre = "", rut = "", dv = "", direccion = "", telefono = "", email = "") => {
     try {
-        debugger
         const cliente = {
             "nombre": nombre,
             "rut": rut,
