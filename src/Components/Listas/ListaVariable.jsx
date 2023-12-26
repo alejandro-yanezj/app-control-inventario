@@ -1,4 +1,4 @@
-import { Box, List, ListItem, TextField} from "@mui/material"
+import { Box, List, ListItem, TextField, Typography} from "@mui/material"
 
 
 export const ListaVariable = ({data = {}}) =>{
@@ -7,12 +7,13 @@ export const ListaVariable = ({data = {}}) =>{
     const values = data!=null?Object.values(data):[];
 
     return(
-        <List> 
+        <Box sx={{display:'flex',flexDirection:'row',justifyContent:'space-between', margin:'2%'}}>
+
+        
             {keys.map((k,i) =>{
                 return (
-                    <ListItem key = {k}>
-                    <Box sx={{fontSize:'100%'}}> {k}: {values[i]} </ Box>
-                    </ListItem>)
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '100%'}}> {k}: {values[i]} </Typography>
+                    )
             })}
-        </List>)        
+        </Box>)        
 }

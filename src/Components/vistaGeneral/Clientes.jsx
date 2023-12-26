@@ -35,7 +35,7 @@ export const Clientes = () => {
         const c = await getClienteById(idCliente);
         if (c!=null){
             setDatosClienteSeleccionado({
-                "Nombre":c.nombre,
+                "Cliente":c.nombre,
                 "Rut": c.rut + "-" + c.dv,
                 "Direccion": c.direccion,
                 "Email": c.email,
@@ -130,7 +130,7 @@ export const Clientes = () => {
                 </TableCell>
 
             </Table>
-
+            
             <ListaVariable data={datosClienteSeleccionado}></ListaVariable>
             <TablaVentas ventas={ventasFiltradas} validar={validarVentasTabla}></TablaVentas>
             <Outlet context={[from]}></Outlet>

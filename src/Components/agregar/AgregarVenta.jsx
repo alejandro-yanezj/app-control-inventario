@@ -22,7 +22,7 @@ import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { CabeceraTablaStyle, ContainerModalAgregarVentaStyle, TablaScrollStyle, TablaVentaScrollStyle } from '../../Utils/Temas';
 import { makeStyles } from '@mui/styles';
-import { addVenta, getVentas } from '../../services/Ventas';
+import { addVenta, getVentaResumenById, getVentas } from '../../services/Ventas';
 import { getProductos } from '../../services/Productos';
 import { ModalInformacion } from '../Modals/ModalInformacion';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -46,14 +46,15 @@ export const AgregarVenta = () => {
     const [listaProductos, setListaProductos] = useState([]);
     const [listaClientes, setListaClientes] = useState([]);
     const [listaProductosAgregados, setListaProductosAgregados] = useState([])
-    const [showSales, setShowSales] = useState(false);
     const [ventas, setVentas] = useState([]);
     const [showTablaProductos, setShowTablaProductos] = useState(false);
     const [openModalInformacion, setOpenModalInformacion] = useState(false);
     const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
-
-
     const [mensajeModalInformacion, setMensajeModalInformacion] = useState(null);
+    const [openModalConfirmacionCopiar, setOpenModalConfirmacionCopiar] = useState(false);
+    const [openModalInformacionCopiar, setOpenModalInformacionCopiar] = useState(false);
+    const [mensajeModalInformacionCopiar, setMensajeModalInformacionCopiar] = useState(null);
+
 
     const encabezados = ["Nombre", "SKU", "Unidad", "Cant.", "Precio unitario", "Eliminar"]
 
@@ -87,9 +88,23 @@ export const AgregarVenta = () => {
 
     const addVentaService = async () => {
         debugger
-        const venta = await addVenta(clienteAgregado.id,listaProductosAgregados);
+        const venta = await addVenta(clienteAgregado.id, listaProductosAgregados);
         setCodigoRespuestaAgregarVenta(venta.codigo)
         setMensajeModalInformacion(venta.mensaje);
+    }
+
+    const getVentaCopiarService = async () => {
+        debugger
+        const venta = await getVentaResumenById(ventaSeleccionada.idVenta);
+        if(venta.idVenta!=null){
+            setClienteAgregado(venta.cliente);
+            setListaProductosAgregados(venta.productos);
+            setVentaSeleccionada(null);
+            setMensajeModalInformacionCopiar("Cliente y productos copiados correctamente")
+        }
+        else{
+            setMensajeModalInformacionCopiar(venta.mensaje);
+        }
     }
 
     useEffect(() => {
@@ -153,7 +168,7 @@ export const AgregarVenta = () => {
     };
 
     const handleClickCopy = () => {
-        console.log("boton copy")
+        setOpenModalConfirmacionCopiar(true);
     }
 
     const handleDeleteCliente = () => {
@@ -161,7 +176,7 @@ export const AgregarVenta = () => {
     }
 
     const handleClickOK = () => {
-        if (codigoRespuestaAgregarVenta=== "200") {
+        if (codigoRespuestaAgregarVenta === "200") {
             setOpenModalInformacion(false);
             navigate("/app-inventario/ventas");
         } else {
@@ -220,12 +235,12 @@ export const AgregarVenta = () => {
 
     const validarProductos = () => {
         debugger
-        if (listaProductosAgregados == null || listaProductosAgregados.length===0) {
+        if (listaProductosAgregados == null || listaProductosAgregados.length === 0) {
             setMensajeModalInformacion("No se puede agregar una venta sin productos")
             return false;
         } else {
             const productosInvalidos = listaProductosAgregados.filter(producto => producto.precio <= 0 || producto.cantidad <= 0);
-            if (productosInvalidos!=null && productosInvalidos.length>0) {
+            if (productosInvalidos != null && productosInvalidos.length > 0) {
                 setMensajeModalInformacion("No se pueden agregar productos sin cantidad o precio")
                 return false;
             }
@@ -238,7 +253,6 @@ export const AgregarVenta = () => {
 
 
     const handleClickConfirmarInfo = async () => {
-        debugger
         const response = await addVentaService();
         setOpenModalInformacion(true);
         setOpenModalConfirmacion(false);
@@ -247,6 +261,23 @@ export const AgregarVenta = () => {
     const handleClickCancelarInfo = () => {
         setOpenModalConfirmacion(false);
     }
+
+    const handleClickCancelarCopiar = () => {
+        setOpenModalConfirmacionCopiar(false);
+    }
+
+    const handleClickOKCopiar = () => {
+        setOpenModalInformacionCopiar(false);
+    }
+
+    const handleClickConfirmarCopiar = async () => {
+        debugger
+        const response = await getVentaCopiarService();
+        setOpenModalInformacionCopiar(true);
+        setOpenModalConfirmacionCopiar(false);
+    }
+
+
 
     return (
         <Modal open={openModal} onClose={handleOnClose} BackdropProps={{ onClick: (event) => event.stopPropagation() }}>
@@ -411,10 +442,23 @@ export const AgregarVenta = () => {
                     handleClickConfirmarInfo={handleClickConfirmarInfo}
                 />
 
+                <ModalConfirmacion
+                    openModalConfirmacion={openModalConfirmacionCopiar}
+                    mensaje={"¿Confirma que desea copiar la venta? Los datos que hayan sido ingresados previamente serán borrados"}
+                    handleClickCancelarInfo={handleClickCancelarCopiar}
+                    handleClickConfirmarInfo={handleClickConfirmarCopiar}
+                />
+
                 <ModalInformacion
                     openModalInformacion={openModalInformacion}
                     mensaje={mensajeModalInformacion}
                     handleClickOK={handleClickOK}
+                />
+
+                <ModalInformacion
+                    openModalInformacion={openModalInformacionCopiar}
+                    mensaje={mensajeModalInformacionCopiar}
+                    handleClickOK={handleClickOKCopiar}
                 />
             </Container>
         </Modal>

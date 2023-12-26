@@ -31,6 +31,24 @@ export const getVentaById = async (idVenta) => {
     }
 }
 
+export const getVentaResumenById = async (idVenta) => {
+    try {
+        debugger
+        const response = await axios.get(`${basePath}/obtener/resumen/${idVenta}`)
+        return response.data;
+    } catch (err) {
+        if (error != null && error['response'] && error.response['data']) {
+            return error.response.data;
+        }
+        else {
+            return {
+                "codigo": "500",
+                "mensaje": "Error de conexion con el servidor"
+            }
+        }
+    }
+}
+
 export const addVenta = async (idCliente = "", productos = []) => {
     debugger
     try {
