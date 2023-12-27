@@ -24,7 +24,12 @@ export const CabeceraTablaStyle = {
 export const NavBarStyle = {
     bgcolor: '#C8C8C8',
     width: '100%',
-    '&.MuiBottomNavigation-root': { width: '100%' }
+    '&.MuiBottomNavigation-root': { width: '100%' },
+    position: 'fixed', // Fija el componente en la parte superior
+    top: 0, // Lo coloca en la parte superior
+    width: '100%', // Opcional: para ocupar todo el ancho
+    zIndex: 1000, // Ajusta el índice z para superponerlo correctamente
+
 }
 
 export const IconoNavBarSize = {
@@ -48,11 +53,11 @@ export const ContainerModalAgregarStyle = {
     flexDirection: 'column',
     alignItems: 'center',
     '@media (min-width: 1200px)': {
-      maxWidth: '500px',
+        maxWidth: '500px',
     },
     '@media (min-height: 720px)': {
         maxHeight: '700px',
-      }
+    }
 }
 
 export const ContainerModalAgregarProductoStyle = {
@@ -71,11 +76,11 @@ export const ContainerModalAgregarProductoStyle = {
     flexDirection: 'column',
     alignItems: 'center',
     '@media (min-width: 1200px)': {
-      maxWidth: '500px',
+        maxWidth: '500px',
     },
     '@media (min-height: 720px)': {
         maxHeight: '600px',
-      }
+    }
 }
 export const ModalDetalleVenta = {
 
@@ -137,7 +142,7 @@ export const ModalDetalleVentaStyle = {
     maxWidth: '100%', // Ajusta el ancho del modal según tus necesidades
     maxHeight: '90%', // Ajusta la altura máxima del modal según tus necesidades
     overflow: 'hidden',
-     // Para evitar el desbordamiento
+    // Para evitar el desbordamiento
 }
 
 
@@ -150,8 +155,8 @@ export const ContainerModalAgregarVentaStyle = {
     boxShadow: '24px',
     padding: 4,
     width: '80%',
-    maxWidth:'1000px', // Ajusta el ancho del modal según tus necesidades
-    height:'80%',
+    maxWidth: '1000px', // Ajusta el ancho del modal según tus necesidades
+    height: '80%',
     maxHeight: '600px', // Ajusta la altura máxima del modal según tus necesidades
     overflow: 'hidden', // Para evitar el desbordamiento
 
@@ -160,7 +165,7 @@ export const ContainerModalAgregarVentaStyle = {
 
 export const TablaVentaScrollStyle = {
     table: {
-        maxHeight:'30px',
+        maxHeight: '30px',
         '& .MuiTableCell-root': {
             padding: '0', // Ajusta el padding vertical
             height: '5px', // Ajusta la altura de las celdas
@@ -178,7 +183,7 @@ export const TablaVentaScrollStyle = {
         top: 0,
         zIndex: 1,
         backgroundColor: '#C8C8C8',
-        color:'white',
+        color: 'white',
         "& .MuiTableCell-head": {
             color: "white",
         },

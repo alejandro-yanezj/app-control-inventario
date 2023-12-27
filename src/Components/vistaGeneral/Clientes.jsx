@@ -94,7 +94,7 @@ export const Clientes = () => {
     }
 
     return (
-        <Container>
+        <Container sx={{mt:'5%'}} >
             <Table sx={{marginTop:'2%'}}>
                 <TableCell sx={{width:'30%'}}>
                     <Button variant="contained" color="success" endIcon={<PersonAddIcon />} onClick={handleClickAgregarCliente} >Agregar Cliente</Button>

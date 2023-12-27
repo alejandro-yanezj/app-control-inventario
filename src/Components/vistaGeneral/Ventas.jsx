@@ -63,7 +63,7 @@ export const Ventas = () => {
     
 
     return (
-        <Container>
+        <Container sx={{mt:'5%'}} >
             <Table sx={{ marginTop: '2%' }}>
                 <TableCell sx={{ width: '30%' }}>
 
