@@ -7,8 +7,8 @@ const url = join(__dirname, './dist/index.html')
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1300,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
     },
