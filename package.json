@@ -11,19 +11,23 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "package-win": "electron-builder --win"
-
+  },
+  "description": "Descripción de tu aplicación aquí",
+  "author": {
+    "name": "Alejandro Yanez",
+    "email": "alejandro.pyanezj@gmail.com",
+    "url": "https://github.com/AlejandroYanezJ"
   },
   "build": {
-    "appId": "App-control-inventario",
+    "appId": "alejandro.miapp",
+    "productName": "App-control-inventario",
     "directories": {
-      "output": "dist"
+      "output": "dist/electron-builder"
     },
     "win": {
-      "target": "nsis"
-    },
-    "files": [
-      "dist/**/*"
-    ]
+      "target": "portable",
+      "icon": "src/icons/inventario.ico"
+    }
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -39,8 +43,9 @@
     "yarn": "^1.22.21"
   },
   "devDependencies": {
-    "electron-builder": "^24.9.1",
     "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "electron-router-dom": "^1.0.5",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
