@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 
-const basePath = "http://localhost:8080/productos"
+import {config} from '../../config'
+
+const basePath =`${config.inventarioMSBasePath}/productos`
 
 export const getProductos = async () => {
     try {
