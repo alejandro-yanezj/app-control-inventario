@@ -1,7 +1,7 @@
 import axios from 'axios';
+import {config} from '../../config'
 
-
-const basePath = "http://localhost:8080/clientes"
+const basePath =`${config.inventarioMSBasePath}/clientes`
 
 export const getClientes = async () => {
     try {

@@ -9,6 +9,8 @@ export const ErrorRedirectHome = () => {
     const navigate = useNavigate();
 
     const handleClickHome = () => {
+        const currentURL = window.location.href;
+        console.log('La URL actual es:', currentURL);
         navigate("/");
     }
 

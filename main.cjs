@@ -5,6 +5,7 @@ const isDev = require('electron-is-dev');
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1280,
+
     height: 800,
     webPreferences: {
       nodeIntegration: true,
@@ -16,6 +17,7 @@ function createWindow() {
 }
 
 app.whenReady().then(createWindow);
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

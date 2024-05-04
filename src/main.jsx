@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { Home } from './Components/Home'
 import { AgregarProducto } from "./Components/Agregar/AgregarProducto";
 import { AgregarCliente } from "./Components/Agregar/AgregarCliente";
@@ -16,7 +16,7 @@ import * as React from 'react';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
 
         <Route path="/app-inventario/" element={<Home />}>
@@ -40,7 +40,7 @@ export default function App() {
 
         <Route path="*" element={<ErrorRedirectHome />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
