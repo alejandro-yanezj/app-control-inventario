@@ -58,62 +58,64 @@ export const AgregarCliente = () => {
     }
 
     const validarNombre = () => {
-        console.log("validando nombre -->", nombreCliente);
-        if (nombreCliente === null || nombreCliente.length < 1) {
-            mostrarAlerta("error", "Debe ingresar nombre cliente");
+        const regexNombre = /^[a-zA-Z0-9_ñ\s]*$/;
+        if (!validarRegex(regexNombre,nombreCliente)) {
+            mostrarAlerta("error", "Debe ingresar nombre válido");
             return false;
         }
         return true;
     }
 
     const validarRut = () => {
-        console.log("validando rut")
-        if (rutConDV === null || rutConDV.length < 1) {
-            mostrarAlerta("error", "Debe ingresar rut cliente");
+        const regexRut = /^\d{1,2}\d{3}\d{3}-[0-9kK]$/;
+        if (!validarRegex(regexRut,rutConDV)) {
+            mostrarAlerta("error", "Debe ingresar rut válido en formato 11111111-1");
             return false;
-            //ingresar rut;
         }
         return validacionRutModulo11();
     }
 
     const validarTelefono = () => {
-        console.log("validando telefono")
-        if (telefono === null || telefono.length < 1) {
-            mostrarAlerta("error", "Debe ingresar telefono cliente");
+        const regexTelefono = /^\+?[0-9_ñ]{8,11}$/;
+        if (!validarRegex(regexTelefono,telefono)) {
+            mostrarAlerta("error", "Debe ingresar telefono válido");
             return false;
         }
         return true;
     }
 
     const validarEmail = () => {
-        console.log("validando email")
-        if (email === null || email.length < 1) {
-            mostrarAlerta("error", "Debe ingresar email cliente");
+        const regexEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+        if (!validarRegex(regexEmail, email)) {
+            mostrarAlerta("error", "Debe ingresar email valido");
             return false;
-            //ingresar rut;
         }
         return true;
-        //validar modulo 11
     }
 
     const validarDireccion = () => {
-        console.log("validando email")
-        if (direccion === null || direccion.length < 1) {
-            mostrarAlerta("error", "Debe ingresar direccion cliente");
+        const regexDireccion = /^[a-zA-Z0-9\s#ñ]{5,}$/;
+        if (!validarRegex(regexDireccion,direccion)) {
+            mostrarAlerta("error", "Debe ingresar direccion válida");
             return false;
-            //ingresar rut;
         }
         return true;
-        //validar modulo 11
     }
 
     const validacionRutModulo11 = () => {
-        //agregar la validacion de modulo 11 real
-        if (rutConDV.length > 0) {
-            let rut = rutConDV.replace("-", "");
-            const dv = rut.substring((rut.length - 1))
-            rut = rut.substring(0, rut.length - 1)
-            setRut(rut);
+        const rut = rutConDV.replace("-","")
+        const dv = rut.slice(-1);
+        const rutSinDV = rut.slice(0, -1);
+        let suma = 0;
+        let multiplicador = 2;
+        for (let i = rutSinDV.length - 1; i >= 0; i--) {
+            suma += parseInt(rutSinDV.charAt(i)) * multiplicador;
+            multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
+        }
+        const dvEsperado = 11 - (suma % 11);
+        const dvCalculado = dvEsperado === 11 ? "0" : dvEsperado === 10 ? "K" : dvEsperado.toString();
+        if(dv === dvCalculado){
+            setRut(rutSinDV);
             setDv(dv);
             return true;
         }
@@ -163,40 +165,32 @@ export const AgregarCliente = () => {
     }
 
     const handleOnChangeRut = (e) => {
-        //validar (?)
         setRutConDV(e.target.value)
     }
 
     const handleOnChangeDireccion = (e) => {
-        //validar (?)
         setDireccion(e.target.value)
     }
 
     const handleOnChangeTelefono = (e) => {
-        //validar (?)
         setTelefono(e.target.value)
     }
 
     const handleOnChangeEmail = (e) => {
-        //validar (?)
         setEmail(e.target.value)
-
     }
 
     const handleCloseModal = () => {
         console.log("cerrando modal")
     }
 
-    const renderAlert = () => {
-        if (showAlert) {
-            return (
-                <Alert sx={{ marginTop: '5%' }} severity={alertSeverity}>
-                    {alertContent}
-                </Alert>
-            );
+    const validarRegex = (regex, input) => {
+        console.log("se valida regex -->", regex,"para el input -->", input)
+        if(regex.test(input)){
+            return true;
         }
-        return null;
-    };
+        return false;
+    }
 
     return (
         <>

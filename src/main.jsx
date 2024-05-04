@@ -10,6 +10,9 @@ import { ErrorRedirectHome } from './Components/VistasError/ErrorRedirectHome'
 import { DetalleVenta } from "./Components/VistaDetalle/DetalleVenta";
 import { AgregarVenta } from "./Components/agregar/AgregarVenta";
 import { Productos } from "./Components/vistaGeneral/Productos";
+import * as React from 'react';
+
+
 
 export default function App() {
   return (
